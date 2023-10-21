@@ -1,5 +1,6 @@
-export default function HomePage() {
-  return (
-    <div>Hello World</div>
-  )
-}
+const HomePage = async () => {
+
+  return <div>Hello World</div>;
+};
+
+export default HomePage;
