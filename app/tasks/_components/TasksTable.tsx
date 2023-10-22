@@ -1,6 +1,9 @@
 "use client";
 
-import { TaskStatusBadge } from "@/app/tasks/_components/TaskStatusBadge";
+import {
+  TaskPriorityBadge,
+  TaskStatusBadge,
+} from "@/app/tasks/_components/TaskBadge";
 import { Task } from "@prisma/client";
 import { Table } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
@@ -14,6 +17,7 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
         <Table.Row>
           <Table.ColumnHeaderCell>Task</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell>Priority</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Created</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
@@ -29,6 +33,9 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
             <Table.Cell>{task.title}</Table.Cell>
             <Table.Cell>
               <TaskStatusBadge status={task.status} />
+            </Table.Cell>
+            <Table.Cell>
+              <TaskPriorityBadge priority={task.priority} />
             </Table.Cell>
             <Table.Cell>{task.createdAt.toDateString()}</Table.Cell>
           </Table.Row>

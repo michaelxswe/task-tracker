@@ -1,6 +1,6 @@
 import { taskSchema } from "@/app/utils/validationSchemas";
 import prisma from "@/prisma/client";
-import { Status, Task } from "@prisma/client";
+import { Priority, Status, Task } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 const PATCH = async (request: NextRequest, {params: {id}}: {params: {id: string}}) => {
@@ -41,6 +41,7 @@ const PATCH = async (request: NextRequest, {params: {id}}: {params: {id: string}
       title: body.title,
       description: body.description,
       status: body.status as Status,
+      priority: body.priority as Priority,
     },
   });
 

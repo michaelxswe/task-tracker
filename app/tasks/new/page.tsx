@@ -2,8 +2,7 @@ import {TaskForm} from '../_components/TaskForm'
 
 const NewTaskPage = () => {
   return (
-    <TaskForm/>
-  )
+    <TaskForm />
+  );
 }
-
 export default NewTaskPage

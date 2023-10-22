@@ -1,7 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { taskSchema } from "../../utils/validationSchemas";
-import { Task, Status } from "@prisma/client";
+import { Task, Status, Priority } from "@prisma/client";
 
 const POST = async (request: NextRequest) => {
   const body: Task = await request.json();
@@ -24,6 +24,7 @@ const POST = async (request: NextRequest) => {
       title: body.title,
       description: body.description,
       status: body.status as Status,
+      priority: body.priority as Priority
     },
   });
 
