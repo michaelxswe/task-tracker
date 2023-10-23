@@ -6,3 +6,5 @@ rafc              :quick start
 ctrl + shift + l  :select all occurence
 ctrl + p:         :find file
 shift + alt + f   :prettier
+
+MILESTILE1 : FINISH ALL ESSENTIAL FEATURES DONE
