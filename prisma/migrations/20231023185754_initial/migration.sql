@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Status" AS ENUM ('OPEN', 'IN_PROGRESS', 'CLOSED');
+CREATE TYPE "Status" AS ENUM ('OPEN', 'IN_PROGRESS', 'HELP_NEEDED', 'CLOSED');
 
 -- CreateEnum
 CREATE TYPE "Priority" AS ENUM ('LOW', 'MEDIUM', 'HIGH');
@@ -11,7 +11,7 @@ CREATE TABLE "Task" (
     "description" TEXT NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'OPEN',
     "priority" "Priority" NOT NULL DEFAULT 'MEDIUM',
-    "dueDate" TIMESTAMP(3) NOT NULL,
+    "deadline" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

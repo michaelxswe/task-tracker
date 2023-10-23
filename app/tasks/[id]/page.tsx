@@ -36,12 +36,12 @@ const TaskDetailPage = async ({
             <p
               className={`${
                 task.status !== Status.CLOSED &&
-                task.dueDate.getTime() <= new Date().getTime()
+                task.deadline.getTime() <= new Date().getTime()
                   ? "pt-1 text-base text-red-700"
                   : "pt-1 text-base"
               }`}
             >
-              {task.dueDate.toDateString()}
+              {task.deadline.toDateString()}
             </p>
           </div>
         </div>

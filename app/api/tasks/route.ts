@@ -28,7 +28,7 @@ const POST = async (request: NextRequest) => {
       description: body.description,
       status: body.status as Status,
       priority: body.priority as Priority,
-      dueDate: new Date(body.dueDate)
+      deadline: new Date(body.deadline)
     }
   })
 

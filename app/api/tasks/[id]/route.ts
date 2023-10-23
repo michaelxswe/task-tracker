@@ -42,7 +42,7 @@ const PATCH = async (request: NextRequest, {params: {id}}: {params: {id: string}
       description: body.description,
       status: body.status as Status,
       priority: body.priority as Priority,
-      dueDate: new Date(body.dueDate)
+      deadline: new Date(body.deadline)
     },
   });
 

@@ -62,7 +62,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
   });
 
   return (
-    <div className="mt-6 space-y-4">
+    <div className=" mt-6 space-y-4  px-40">
       {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <form className="space-y-4" onSubmit={onSubmit}>
@@ -82,7 +82,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
         <div className="space-y-2">
           <h5>Description</h5>
           <TextArea
-            className=" h-48"
+            className=" h-80"
             size="3"
             defaultValue={task?.description}
             placeholder={taskExample.description}
@@ -93,75 +93,78 @@ const TaskForm = ({ task }: { task?: Task }) => {
           )}
         </div>
 
-        <div className="space-y-2">
-          <h5>Due Date</h5>
-          <div className=" w-32">
-            <TextField.Root>
-              <TextField.Input
+        <div className="flex  gap-8 items-center">
+          <div className="space-y-2">
+            <h5>Deadline</h5>
+            <div className=" w-32">
+              <TextField.Root>
+                <TextField.Input
+                  autoComplete="off"
+                  size="3"
+                  defaultValue={task?.deadline.toLocaleDateString("en-US", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })}
+                  placeholder="MM/DD/YYYY"
+                  {...register("deadline", {
+                    setValueAs: (value) => convertToUTC(value),
+                  })}
+                />
+              </TextField.Root>
+            </div>
+            {errors.deadline && (
+              <ErrorMessage>{errors.deadline.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <h5>Status</h5>
+            <div>
+              <Select.Root
+                defaultValue={task ? task.status : Status.OPEN}
                 size="3"
-                defaultValue={task?.dueDate?.toLocaleDateString("en-US", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
-                placeholder="MM/DD/YYYY"
-                {...register("dueDate", {
-                  setValueAs: (value) => convertToUTC(value),
-                })}
-              />
-            </TextField.Root>
+                onValueChange={(value) => setTaskStatus(value as Status)}
+              >
+                <Select.Trigger />
+                <Select.Content position="popper">
+                  <Select.Item value={Status.OPEN}>Open</Select.Item>
+                  <Select.Item value={Status.IN_PROGRESS}>
+                    In Progress
+                  </Select.Item>
+                  <Select.Item value={Status.HELP_NEEDED}>
+                    Help Needed
+                  </Select.Item>
+                  <Select.Item value={Status.CLOSED}>Closed</Select.Item>
+                </Select.Content>
+              </Select.Root>
+            </div>
           </div>
 
-          {errors.dueDate && (
-            <ErrorMessage>{errors.dueDate.message}</ErrorMessage>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <h5>Status</h5>
-          <div>
-            <Select.Root
-              defaultValue={task ? task.status : Status.OPEN}
-              size="3"
-              onValueChange={(value) => setTaskStatus(value as Status)}
-            >
-              <Select.Trigger />
-              <Select.Content position="popper">
-                <Select.Item value={Status.OPEN}>Open</Select.Item>
-                <Select.Item value={Status.IN_PROGRESS}>
-                  In Progress
-                </Select.Item>
-                <Select.Item value={Status.HELP_NEEDED}>
-                  Help Needed
-                </Select.Item>
-                <Select.Item value={Status.CLOSED}>Closed</Select.Item>
-              </Select.Content>
-            </Select.Root>
+          <div className="space-y-2">
+            <div>Priority</div>
+            <div>
+              <Select.Root
+                defaultValue={task ? task.priority : Priority.MEDIUM}
+                size="3"
+                onValueChange={(value) => setTaskPriority(value as Priority)}
+              >
+                <Select.Trigger />
+                <Select.Content position="popper">
+                  <Select.Item value={Priority.LOW}>Low</Select.Item>
+                  <Select.Item value={Priority.MEDIUM}>Medium</Select.Item>
+                  <Select.Item value={Priority.HIGH}>High</Select.Item>
+                </Select.Content>
+              </Select.Root>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <div>Priority</div>
-          <div>
-            <Select.Root
-              defaultValue={task ? task.priority : Priority.MEDIUM}
-              size="3"
-              onValueChange={(value) => setTaskPriority(value as Priority)}
-            >
-              <Select.Trigger />
-              <Select.Content position="popper">
-                <Select.Item value={Priority.LOW}>Low</Select.Item>
-                <Select.Item value={Priority.MEDIUM}>Medium</Select.Item>
-                <Select.Item value={Priority.HIGH}>High</Select.Item>
-              </Select.Content>
-            </Select.Root>
+          <div className=" ml-auto">
+            <Button size="3" color="sky" disabled={submitting}>
+              Submit
+            </Button>
           </div>
-        </div>
 
-        <div className="flex justify-end">
-          <Button size="3" color="sky" disabled={submitting}>
-            Submit
-          </Button>
         </div>
       </form>
     </div>

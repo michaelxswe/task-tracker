@@ -11,29 +11,22 @@ import { useRouter } from "next/navigation";
 const TasksTable = ({ tasks }: { tasks: Task[] }) => {
   const router = useRouter();
 
+  const fields = ["Task", "Status", "Priority", "Created", "Deadline"]
+
   return (
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeaderCell>
-            <h3 className=" text-xl font-sans">Task</h3>
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>
-            <h3 className=" text-xl font-sans">Status</h3>
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>
-            <h3 className=" text-xl font-sans">Priority</h3>
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>
-            <h3 className=" text-xl font-sans">Created</h3>
-          </Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell>
-            <h3 className=" text-xl font-sans">Due Date</h3>
-          </Table.ColumnHeaderCell>
+          {fields.map((field, index) => (
+            <Table.ColumnHeaderCell key = {index}>
+              <h3 className=" font-sans text-xl">{field}</h3>
+            </Table.ColumnHeaderCell>
+          ))}
         </Table.Row>
       </Table.Header>
       <Table.Body>
         {tasks.map((task) => (
+
           <Table.Row
             className="transition-colors duration-200 hover:bg-gray-800"
             key={task.id}
@@ -51,20 +44,18 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
               <TaskPriorityBadge priority={task.priority} />
             </Table.Cell>
             <Table.Cell>
-              <p className="pt-1 text-base">
-                {task.createdAt.toDateString()}
-              </p>
+              <p className="pt-1 text-base">{task.createdAt.toDateString()}</p>
             </Table.Cell>
             <Table.Cell>
               <p
                 className={`${
                   task.status !== Status.CLOSED &&
-                  task.dueDate.getTime() <= new Date().getTime()
+                  task.deadline.getTime() <= new Date().getTime()
                     ? "pt-1 text-base text-red-700"
                     : "pt-1 text-base"
                 }`}
               >
-                {task.dueDate.toDateString()}
+                {task.deadline.toDateString()}
               </p>
             </Table.Cell>
           </Table.Row>
@@ -75,6 +66,3 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
 };
 
 export default TasksTable;
-
-
-
