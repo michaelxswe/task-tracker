@@ -10,13 +10,17 @@ const TasksPage = async () => {
   return (
     <div>
       <div className="mb-6">
-        <Button color="sky">
-          <Link href="/tasks/new">New Task</Link>
-        </Button>
+        <Link href="/tasks/new">
+          <Button size="3" color="iris">
+            Create Task
+          </Button>
+        </Link>
+
       </div>
-      <TasksTable tasks={tasks}/>
+      <TasksTable tasks={tasks} />
     </div>
   );
 };
 
+export const dynamic = "force-dynamic";
 export default TasksPage;

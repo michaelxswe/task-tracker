@@ -12,6 +12,8 @@ const TaskEditPage = async ({ params: { id } }: { params: { id: string } }) => {
   }
 
   return <TaskForm task={task} />;
+
+
 };
 
 export default TaskEditPage;

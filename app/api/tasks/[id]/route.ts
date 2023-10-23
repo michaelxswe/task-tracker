@@ -42,15 +42,36 @@ const PATCH = async (request: NextRequest, {params: {id}}: {params: {id: string}
       description: body.description,
       status: body.status as Status,
       priority: body.priority as Priority,
-      ...(body.dueDate ? { dueDate: new Date(body.dueDate) } : {}),
+      dueDate: new Date(body.dueDate)
     },
   });
 
-  console.log("updated data")
-  console.log(updatedTask)
-
   return NextResponse.json(updatedTask);
+}
+
+
+const DELETE = async (request: NextRequest, {params: {id}}: {params: {id: string}}) => {
+    const task = await prisma.task.findUnique({
+      where: {
+        id: parseInt(id)
+      }
+    })
+
+    if(!task){
+      return NextResponse.json({error: "Task not found"}, {status: 404})
+    }
+
+    await prisma.task.delete({
+      where:{
+        id: task.id
+      }
+    })
+
+    return NextResponse.json({})
+
 }
   
 
-export { PATCH };
+export { PATCH, DELETE };
+
+

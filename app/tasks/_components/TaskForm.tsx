@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskSchema } from "@/app/utils/validationSchemas";
 import { ErrorMessage } from "@/app/components/ErrorMessage";
-import { Spinner } from "@/app/components/Spinner";
 import { Priority, Status, Task } from "@prisma/client";
 import { convertToUTC } from "@/app/utils/timeCoversion";
 import { taskExample } from "@/app/utils/placeHoder";
@@ -50,6 +49,8 @@ const TaskForm = ({ task }: { task?: Task }) => {
       }
 
       router.push("/tasks");
+      router.refresh();
+
     } catch (error) {
       setSubmitting(false);
       if (axios.isAxiosError(error) && error.response?.data?.ErrorMessage) {
@@ -61,7 +62,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
   });
 
   return (
-    <div className="mt-6 max-w-xl space-y-4">
+    <div className="mt-6 space-y-4">
       {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <form className="space-y-4" onSubmit={onSubmit}>
@@ -69,6 +70,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
           <h5>Title</h5>
           <TextField.Root>
             <TextField.Input
+              size="3"
               defaultValue={task?.title}
               placeholder={taskExample.title}
               {...register("title")}
@@ -80,7 +82,8 @@ const TaskForm = ({ task }: { task?: Task }) => {
         <div className="space-y-2">
           <h5>Description</h5>
           <TextArea
-            className=" h-52"
+            className=" h-48"
+            size="3"
             defaultValue={task?.description}
             placeholder={taskExample.description}
             {...register("description")}
@@ -92,9 +95,10 @@ const TaskForm = ({ task }: { task?: Task }) => {
 
         <div className="space-y-2">
           <h5>Due Date</h5>
-          <div className = " w-28">
+          <div className=" w-32">
             <TextField.Root>
               <TextField.Input
+                size="3"
                 defaultValue={task?.dueDate?.toLocaleDateString("en-US", {
                   day: "2-digit",
                   month: "2-digit",
@@ -127,6 +131,9 @@ const TaskForm = ({ task }: { task?: Task }) => {
                 <Select.Item value={Status.IN_PROGRESS}>
                   In Progress
                 </Select.Item>
+                <Select.Item value={Status.HELP_NEEDED}>
+                  Help Needed
+                </Select.Item>
                 <Select.Item value={Status.CLOSED}>Closed</Select.Item>
               </Select.Content>
             </Select.Root>
@@ -153,7 +160,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
 
         <div className="flex justify-end">
           <Button size="3" color="sky" disabled={submitting}>
-            Submit{submitting && <Spinner />}
+            Submit
           </Button>
         </div>
       </form>

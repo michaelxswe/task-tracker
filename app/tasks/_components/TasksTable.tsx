@@ -11,8 +11,6 @@ import { useRouter } from "next/navigation";
 const TasksTable = ({ tasks }: { tasks: Task[] }) => {
   const router = useRouter();
 
-
-
   return (
     <Table.Root variant="surface">
       <Table.Header>

@@ -23,12 +23,12 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         <Theme appearance="dark" accentColor="blue">
           <Navbar />
           <main className="px-8">{children}</main>
-          <footer className ="mt-6"></footer>
+          <footer className="mt-6"></footer>
         </Theme>
       </body>
     </html>
   );
 };
 
-export {metadata}
+export { metadata };
 export default HomeLayout;

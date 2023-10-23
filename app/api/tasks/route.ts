@@ -22,18 +22,15 @@ const POST = async (request: NextRequest) => {
     );
   }
 
-
   const newTask = await prisma.task.create({
     data: {
       title: body.title,
       description: body.description,
       status: body.status as Status,
       priority: body.priority as Priority,
-      ...(body.dueDate
-        ? { dueDate: new Date(body.dueDate) }
-        : {}),
-    },
-  });
+      dueDate: new Date(body.dueDate)
+    }
+  })
 
   return NextResponse.json(newTask, { status: 201 });
 };

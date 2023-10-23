@@ -21,6 +21,7 @@ model Task {
 enum Status {
   OPEN
   IN_PROGRESS
+  HELP_NEEDED
   CLOSED
 }
 
