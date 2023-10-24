@@ -1,24 +1,32 @@
-"use client";
+'use client'
 
 import {
   TaskPriorityBadge,
-  TaskStatusBadge,
-} from "@/app/tasks/_components/TaskBadge";
-import { Status, Task } from "@prisma/client";
-import { Table } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+  TaskStatusBadge
+} from '@/app/tasks/_components/TaskBadge'
+import { Status, Task, Team } from '@prisma/client'
+import { Table } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
 
-const TasksTable = ({ tasks }: { tasks: Task[] }) => {
-  const router = useRouter();
+// const TasksTable = ({tasks,}: {tasks: ({team: (Team)} & Task)[];}) => {
 
-  const fields = ["Task", "Status", "Priority", "Created", "Deadline"]
+const TasksTable = ({
+  tasks
+}: {
+  tasks: ({
+    team: Team | null
+  } & Task)[]
+}) => {
+  const router = useRouter()
+
+  const fields = ['Task', 'Team', 'Status', 'Priority', 'Created', 'Deadline']
 
   return (
     <Table.Root variant="surface">
       <Table.Header>
-        <Table.Row>
+        <Table.Row className="">
           {fields.map((field, index) => (
-            <Table.ColumnHeaderCell key = {index}>
+            <Table.ColumnHeaderCell key={index}>
               <h3 className=" font-sans text-xl">{field}</h3>
             </Table.ColumnHeaderCell>
           ))}
@@ -26,16 +34,18 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
       </Table.Header>
       <Table.Body>
         {tasks.map((task) => (
-
           <Table.Row
             className="transition-colors duration-200 hover:bg-gray-800"
             key={task.id}
             onClick={() => {
-              router.push(`/tasks/${task.id}`);
+              router.push(`/tasks/${task.id}`)
             }}
           >
             <Table.Cell>
               <p className="pt-1 text-base">{task.title}</p>
+            </Table.Cell>
+            <Table.Cell>
+              <p className="pt-1 text-base">{task?.team?.name}</p>
             </Table.Cell>
             <Table.Cell>
               <TaskStatusBadge status={task.status} />
@@ -51,8 +61,8 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
                 className={`${
                   task.status !== Status.CLOSED &&
                   task.deadline.getTime() <= new Date().getTime()
-                    ? "pt-1 text-base text-red-700"
-                    : "pt-1 text-base"
+                    ? 'pt-1 text-base text-red-700'
+                    : 'pt-1 text-base'
                 }`}
               >
                 {task.deadline.toDateString()}
@@ -62,7 +72,7 @@ const TasksTable = ({ tasks }: { tasks: Task[] }) => {
         ))}
       </Table.Body>
     </Table.Root>
-  );
-};
+  )
+}
 
-export default TasksTable;
+export default TasksTable

@@ -1,65 +1,81 @@
-"use client";
+'use client'
 
-import { Button, TextArea, TextField, Select } from "@radix-ui/themes";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { taskSchema } from "@/app/utils/validationSchemas";
-import { ErrorMessage } from "@/app/components/ErrorMessage";
-import { Priority, Status, Task } from "@prisma/client";
-import { convertToUTC } from "@/app/utils/timeCoversion";
-import { taskExample } from "@/app/utils/placeHoder";
+import { Button, TextArea, TextField, Select } from '@radix-ui/themes'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { taskSchema } from '@/app/utils/validationSchemas'
+import { ErrorMessage } from '@/app/components/ErrorMessage'
+import { Priority, Status, Task, Team } from '@prisma/client'
+import { convertToUTC } from '@/app/utils/timeCoversion'
+import { taskExample } from '@/app/utils/placeHoder'
 
-const TaskForm = ({ task }: { task?: Task }) => {
+const TaskForm = ({
+  task,
+  teams
+}: {
+  task?:
+    | ({
+        team: Team | null
+      } & Task)
+    | null
+  teams: Team[]
+}) => {
+  const router = useRouter()
 
-  const router = useRouter();
-
-  const [taskStatus, setTaskStatus] = useState<Status>(Status.OPEN);
-  const [taskPriority, setTaskPriority] = useState<Priority>(Priority.MEDIUM);
+  const [taskStatus, setTaskStatus] = useState<Status>(Status.OPEN)
+  const [taskPriority, setTaskPriority] = useState<Priority>(Priority.MEDIUM)
+  const [taskTeam, setTaskTeam] = useState<number | null>()
 
   useEffect(() => {
-    if(task){
+    if (task) {
       setTaskStatus(task.status)
       setTaskPriority(task.priority)
+
+      if (task.teamId) setTaskTeam(task.teamId)
     }
   }, [])
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<Task>({ resolver: zodResolver(taskSchema) });
+    formState: { errors }
+  } = useForm<Task>({ resolver: zodResolver(taskSchema) })
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('')
 
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false)
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      setSubmitting(true)
 
-      setSubmitting(true);
-      const taskData = { ...data, status: taskStatus, priority: taskPriority };
+      const taskData = {
+        ...data,
+        status: taskStatus,
+        priority: taskPriority,
+        teamId: taskTeam
+      }
 
       if (task) {
-        await axios.patch(`/api/tasks/${task.id}`, taskData);
+        await axios.patch(`/api/tasks/${task.id}`, taskData)
       } else {
-        await axios.post("/api/tasks", taskData);
+        await axios.post('/api/tasks', taskData)
       }
 
-      router.push("/tasks");
-      router.refresh();
-
+      router.push('/tasks')
+      router.refresh()
     } catch (error) {
-      setSubmitting(false);
+      setSubmitting(false)
       if (axios.isAxiosError(error) && error.response?.data?.ErrorMessage) {
-        setError(error.response?.data?.ErrorMessage);
+        setError(error.response?.data?.ErrorMessage)
       } else {
-        setError("Unexpected error");
+        setError('Unexpected error')
       }
     }
-  });
+  })
 
   return (
     <div className=" mt-6 space-y-4  px-40">
@@ -73,7 +89,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
               size="3"
               defaultValue={task?.title}
               placeholder={taskExample.title}
-              {...register("title")}
+              {...register('title')}
             />
           </TextField.Root>
           {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
@@ -82,40 +98,37 @@ const TaskForm = ({ task }: { task?: Task }) => {
         <div className="space-y-2">
           <h5>Description</h5>
           <TextArea
-            className=" h-80"
+            className=" h-52"
             size="3"
             defaultValue={task?.description}
             placeholder={taskExample.description}
-            {...register("description")}
+            {...register('description')}
           />
           {errors.description && (
             <ErrorMessage>{errors.description.message}</ErrorMessage>
           )}
         </div>
 
-        <div className="flex  gap-8 items-center">
+        <div className="flex  items-center gap-8">
           <div className="space-y-2">
             <h5>Deadline</h5>
-            <div className=" w-32">
-              <TextField.Root>
+            <div className="">
+              <TextField.Root className=" w-36 pl-2">
                 <TextField.Input
                   autoComplete="off"
                   size="3"
-                  defaultValue={task?.deadline.toLocaleDateString("en-US", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
+                  defaultValue={task?.deadline.toLocaleDateString('en-US', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
                   })}
                   placeholder="MM/DD/YYYY"
-                  {...register("deadline", {
-                    setValueAs: (value) => convertToUTC(value),
+                  {...register('deadline', {
+                    setValueAs: (value) => convertToUTC(value)
                   })}
                 />
               </TextField.Root>
             </div>
-            {errors.deadline && (
-              <ErrorMessage>{errors.deadline.message}</ErrorMessage>
-            )}
           </div>
 
           <div className="space-y-2">
@@ -159,16 +172,43 @@ const TaskForm = ({ task }: { task?: Task }) => {
             </div>
           </div>
 
-          <div className=" ml-auto">
-            <Button size="3" color="sky" disabled={submitting}>
-              Submit
-            </Button>
+          <div className="space-y-2">
+            <div>Team</div>
+            <div>
+              <Select.Root
+                // defaultValue={String(task?.team?.id)}
+                defaultValue={task?.team?.id ? String(task.team.id) : ' '}
+                size="3"
+                onValueChange={(value) => setTaskTeam(parseInt(value))}
+              >
+                <Select.Trigger />
+                <Select.Content position="popper">
+                  <Select.Item value={' '}></Select.Item>
+                  {teams.map((team) => (
+                    <Select.Item key={team.id} value={String(team.id)}>
+                      {team.name}
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Root>
+            </div>
           </div>
+        </div>
 
+        <div className=" w-36">
+          {errors.deadline && (
+            <ErrorMessage>{errors.deadline.message}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="flex justify-center pt-6">
+          <Button size="3" color="sky" disabled={submitting}>
+            Submit
+          </Button>
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export { TaskForm };
+export { TaskForm }

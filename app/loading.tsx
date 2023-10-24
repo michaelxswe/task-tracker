@@ -1,7 +1,7 @@
-import { PageLoader } from "./components/PageLoader";
+import { PageLoader } from './components/PageLoader'
 
 const Pageloading = () => {
-  return <PageLoader/>
-};
+  return <PageLoader />
+}
 
-export default Pageloading;
+export default Pageloading

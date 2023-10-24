@@ -1,26 +1,27 @@
 import {
   TaskPriorityBadge,
-  TaskStatusBadge,
-} from "@/app/tasks/_components/TaskBadge";
-import prisma from "@/prisma/client";
-import { Status } from "@prisma/client";
-import { Card, Grid, Box } from "@radix-ui/themes";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { DeleteButton } from "./_components/DeleteButton";
-import ReactMarkDown from "react-markdown";
+  TaskStatusBadge
+} from '@/app/tasks/_components/TaskBadge'
+import prisma from '@/prisma/client'
+import { Status } from '@prisma/client'
+import { Card, Grid, Box } from '@radix-ui/themes'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { DeleteButton } from './_components/DeleteButton'
+import ReactMarkDown from 'react-markdown'
 
 const TaskDetailPage = async ({
-  params: { id },
+  params: { id }
 }: {
-  params: { id: string };
+  params: { id: string }
 }) => {
   const task = await prisma.task.findUnique({
     where: { id: parseInt(id) },
-  });
+    include: { team: true }
+  })
 
   if (!task) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -37,8 +38,8 @@ const TaskDetailPage = async ({
               className={`${
                 task.status !== Status.CLOSED &&
                 task.deadline.getTime() <= new Date().getTime()
-                  ? "pt-1 text-base text-red-700"
-                  : "pt-1 text-base"
+                  ? 'pt-1 text-base text-red-700'
+                  : 'pt-1 text-base'
               }`}
             >
               {task.deadline.toDateString()}
@@ -63,7 +64,7 @@ const TaskDetailPage = async ({
         </div>
       </Box>
     </Grid>
-  );
-};
+  )
+}
 
-export default TaskDetailPage;
+export default TaskDetailPage

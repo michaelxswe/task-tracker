@@ -1,11 +1,14 @@
-import prisma from "@/prisma/client";
-import { Button} from "@radix-ui/themes";
-import Link from "next/link";
-import TasksTable from "./_components/TasksTable";
-
+import prisma from '@/prisma/client'
+import { Button } from '@radix-ui/themes'
+import Link from 'next/link'
+import TasksTable from './_components/TasksTable'
 
 const TasksPage = async () => {
-  const tasks = await prisma.task.findMany();
+  const tasks = await prisma.task.findMany({
+    include: {
+      team: true
+    }
+  })
 
   return (
     <div>
@@ -15,12 +18,11 @@ const TasksPage = async () => {
             Create Task
           </Button>
         </Link>
-
       </div>
       <TasksTable tasks={tasks} />
     </div>
-  );
-};
+  )
+}
 
-export const dynamic = "force-dynamic";
-export default TasksPage;
+export const dynamic = 'force-dynamic'
+export default TasksPage

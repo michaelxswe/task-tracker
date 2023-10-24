@@ -10,8 +10,7 @@ const PageLoader = () => {
         </span>
       </div>
     </div>
-  );
+  )
 }
 
-export {PageLoader}
-
+export { PageLoader }

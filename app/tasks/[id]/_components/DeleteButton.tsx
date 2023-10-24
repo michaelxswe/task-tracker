@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { AlertDialog } from "@radix-ui/themes";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { AlertDialog } from '@radix-ui/themes'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const DeleteButton = ({ id }: { id: string }) => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(false)
 
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, setDeleting] = useState(false)
 
   const onDelete = async () => {
     try {
-      setDeleting(true);
-      await axios.delete(`/api/tasks/${id}`);
-      router.push("/tasks");
-      router.refresh();
+      setDeleting(true)
+      await axios.delete(`/api/tasks/${id}`)
+      router.push('/tasks')
+      router.refresh()
     } catch (error) {
-      setDeleting(false);
-      setError(true);
+      setDeleting(false)
+      setError(true)
     }
-  };
+  }
 
   return (
     <>
@@ -76,7 +76,7 @@ const DeleteButton = ({ id }: { id: string }) => {
         </AlertDialog.Content>
       </AlertDialog.Root>
     </>
-  );
-};
+  )
+}
 
-export { DeleteButton };
+export { DeleteButton }
