@@ -10,19 +10,10 @@ import { taskSchema } from '@/app/utils/validationSchemas'
 import { ErrorMessage } from '@/app/components/ErrorMessage'
 import { Priority, Status, Task, Team } from '@prisma/client'
 import { convertToUTC } from '@/app/utils/timeCoversion'
-import { taskExample } from '@/app/utils/placeHoder'
+import { taskSample } from '@/app'
 
-const TaskForm = ({
-  task,
-  teams
-}: {
-  task?:
-    | ({
-        team: Team | null
-      } & Task)
-    | null
-  teams: Team[]
-}) => {
+const TaskForm = ({ task, teams }: { task?: ({ team: Team | null } & Task) | null; teams: Team[] }) => {
+  
   const router = useRouter()
 
   const [taskStatus, setTaskStatus] = useState<Status>(Status.OPEN)
@@ -85,14 +76,14 @@ const TaskForm = ({
         <div className="space-y-2">
           <h5>Title</h5>
           <TextField.Root>
-            <TextField.Input size="3" defaultValue={task?.title} placeholder={taskExample.title} {...register('title')} />
+            <TextField.Input size="3" defaultValue={task?.title} placeholder={taskSample.title} {...register('title')} />
           </TextField.Root>
           {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </div>
 
         <div className="space-y-2">
           <h5>Description</h5>
-          <TextArea className=" h-52" size="3" defaultValue={task?.description} placeholder={taskExample.description} {...register('description')} />
+          <TextArea className=" h-52" size="3" defaultValue={task?.description} placeholder={taskSample.description} {...register('description')} />
           {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
         </div>
 
@@ -111,7 +102,7 @@ const TaskForm = ({
                   })}
                   placeholder="MM/DD/YYYY"
                   {...register('deadline', {
-                    setValueAs: (value) => convertToUTC(value)
+                    setValueAs: (value) => convertToUTC(value, 23, 59)
                   })}
                 />
               </TextField.Root>
@@ -150,12 +141,7 @@ const TaskForm = ({
           <div className="space-y-2">
             <div>Team</div>
             <div>
-              <Select.Root
-                // defaultValue={String(task?.team?.id)}
-                defaultValue={task?.team?.id ? String(task.team.id) : ' '}
-                size="3"
-                onValueChange={(value) => setTaskTeam(parseInt(value))}
-              >
+              <Select.Root defaultValue={task?.team?.id ? String(task.team.id) : ' '} size="3" onValueChange={(value) => setTaskTeam(parseInt(value))}>
                 <Select.Trigger />
                 <Select.Content position="popper">
                   <Select.Item value={' '}></Select.Item>
@@ -173,8 +159,8 @@ const TaskForm = ({
         <div className=" w-36">{errors.deadline && <ErrorMessage>{errors.deadline.message}</ErrorMessage>}</div>
 
         <div className="flex justify-center pt-6">
-          <button className=" w-28 h-10 cursor-default  rounded-md bg-[#22c55e] font-medium hover:bg-[#4ade80]" disabled={submitting}>
-            Create Task
+          <button className=" w-28 h-10 cursor-default  rounded-md bg-[#22c55e] font-medium hover:bg-[#4ade80] disabled:cursor-not-allowed disabled:opacity-50" disabled={submitting}>
+            Submit
           </button>
         </div>
       </form>

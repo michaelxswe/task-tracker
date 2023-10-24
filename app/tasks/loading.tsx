@@ -1,7 +1,9 @@
-import { PageLoader } from '../components/PageLoader'
+import { Spinner } from "../components/Spinner"
 
-const Pageloading = () => {
-  return <PageLoader />
+const loadingPage = () => {
+  return (
+    <Spinner/>
+  )
 }
 
-export default Pageloading
+export default loadingPage

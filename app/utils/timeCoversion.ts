@@ -1,4 +1,4 @@
-const convertToUTC = (date: string) => {
+const convertToUTC = (date: string, hour: number = 0, min: number = 0) => {
   const dateFormat = /^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](\d{4})$/
 
   if (!date.match(dateFormat)) {
@@ -13,7 +13,7 @@ const convertToUTC = (date: string) => {
 
   const localDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
 
-  localDate.setHours(23, 59, 0, 0)
+  localDate.setHours(hour, min, 0, 0)
 
   return localDate.toISOString()
 }

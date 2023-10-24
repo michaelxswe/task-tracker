@@ -28,7 +28,7 @@ const DeleteButton = ({ id }: { id: string }) => {
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger disabled={deleting}>
-          <button className=" disabled:h h-10 cursor-default  rounded-md bg-red-600 font-medium enabled:hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50">Delete</button>
+          <button className="h-10 cursor-default  rounded-md bg-red-600 font-medium hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50">Delete</button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Title className="flex justify-center">Confirm Deletion</AlertDialog.Title>

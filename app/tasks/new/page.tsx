@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client'
-import { TaskForm } from '../_components/TaskForm'
+import { TaskForm } from '../components/TaskForm'
 
 const NewTaskPage = async () => {
   const teams = await prisma.team.findMany()

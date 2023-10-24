@@ -1,6 +1,7 @@
 'use client'
 
-import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/_components/TaskBadge'
+import { taskTableFields } from '@/app/index'
+import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/components/TaskBadge'
 import { Status, Task, Team } from '@prisma/client'
 import { Table } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
@@ -8,13 +9,11 @@ import { useRouter } from 'next/navigation'
 const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
   const router = useRouter()
 
-  const fields = ['Task', 'Team', 'Status', 'Priority', 'Created', 'Deadline']
-
   return (
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row className="">
-          {fields.map((field, index) => (
+          {taskTableFields.map((field, index) => (
             <Table.ColumnHeaderCell key={index}>
               <h3 className=" font-sans text-xl">{field}</h3>
             </Table.ColumnHeaderCell>
@@ -55,4 +54,4 @@ const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
   )
 }
 
-export default TasksTable
+export {TasksTable}

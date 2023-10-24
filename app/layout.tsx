@@ -1,6 +1,7 @@
 import '@radix-ui/themes/styles.css'
-import './theme-config.css'
-import './globals.css'
+import './styles/theme-config.css'
+import './styles/globals.css'
+
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Navbar } from './Navbar'

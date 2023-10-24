@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client'
 import Link from 'next/link'
-import TasksTable from './_components/TasksTable'
+import {TasksTable} from './components/TasksTable'
 
 const TasksPage = async () => {
   const tasks = await prisma.task.findMany({

@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client'
 import { notFound } from 'next/navigation'
-import { TaskForm } from '../../_components/TaskForm'
+import { TaskForm } from '../../components/TaskForm'
 
 const TaskEditPage = async ({ params: { id } }: { params: { id: string } }) => {
   const task = await prisma.task.findUnique({
