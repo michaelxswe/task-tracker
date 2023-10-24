@@ -10,9 +10,9 @@ const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
   const router = useRouter()
 
   return (
-    <Table.Root variant="surface">
+    <Table.Root variant="surface" size="3">
       <Table.Header>
-        <Table.Row className="">
+        <Table.Row>
           {taskTableFields.map((field, index) => (
             <Table.ColumnHeaderCell key={index}>
               <h3 className=" font-sans text-xl">{field}</h3>
@@ -54,4 +54,4 @@ const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
   )
 }
 
-export {TasksTable}
+export { TasksTable }

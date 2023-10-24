@@ -18,11 +18,11 @@ const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) =>
   }
 
   return (
-    <Grid columns="6" gap="8">
-      <div className=" col-span-4">
-        <h1 className=" text-3xl font-bold">{task.title}</h1>
-        <div className="mb-4 mt-4 flex items-center justify-between">
-          <div className="flex gap-4">
+    <Grid columns='6' gap='8'>
+      <div className=' col-span-4'>
+        <h1 className=' text-3xl font-bold'>{task.title}</h1>
+        <div className='mb-4 mt-4 flex items-center justify-between'>
+          <div className='flex gap-4'>
             <TaskStatusBadge status={task.status} />
             <TaskPriorityBadge priority={task.priority} />
           </div>
@@ -31,15 +31,15 @@ const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) =>
           </div>
         </div>
 
-        <Card className="prose max-w-full text-white">
+        <Card className='prose max-w-full text-white'>
           <ReactMarkDown>{task.description}</ReactMarkDown>
         </Card>
       </div>
 
-      <div className=" col-span-2">
-        <div className="flex flex-col gap-5">
-          <Link href={`/tasks/${id}/edit`} className=" w-full">
-            <button className=" h-10 w-full cursor-default  rounded-md  bg-blue-500 font-medium hover:bg-blue-400">Edit</button>
+      <div className=' col-span-2'>
+        <div className='flex flex-col gap-5'>
+          <Link href={`/tasks/${id}/edit`} className=' w-full'>
+            <button className=' h-10 w-full cursor-default  rounded-md  bg-[#172554] font-medium hover:bg-[#273466]'>Edit</button>
           </Link>
 
           <DeleteButton id={id} />

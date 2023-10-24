@@ -19,12 +19,12 @@ const metadata: Metadata = {
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang='en' className={inter.variable}>
       <body>
-        <Theme appearance="dark" accentColor="blue">
+        <Theme appearance='dark' accentColor='blue'>
           <Navbar />
-          <main className="px-8">{children}</main>
-          <footer className="mt-6"></footer>
+          <main className='px-8'>{children}</main>
+          <footer className='mt-6'></footer>
         </Theme>
       </body>
     </html>

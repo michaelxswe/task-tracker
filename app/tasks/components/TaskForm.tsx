@@ -76,22 +76,24 @@ const TaskForm = ({ task, teams }: { task?: ({ team: Team | null } & Task) | nul
         <div className="space-y-2">
           <h5>Title</h5>
           <TextField.Root>
-            <TextField.Input size="3" defaultValue={task?.title} placeholder={taskSample.title} {...register('title')} />
+            <TextField.Input className="text-center" size="3" defaultValue={task?.title} placeholder={taskSample.title} {...register('title')} />
           </TextField.Root>
           {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </div>
 
         <div className="space-y-2">
           <h5>Description</h5>
-          <TextArea className=" h-52" size="3" defaultValue={task?.description} placeholder={taskSample.description} {...register('description')} />
+
+          <TextArea className="h-52" size="3" defaultValue={task?.description} placeholder={taskSample.description} {...register('description')} />
+
           {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
         </div>
 
-        <div className="flex  items-center gap-8">
+        <div className="flex gap-8">
           <div className="space-y-2">
             <h5>Deadline</h5>
             <div className="">
-              <TextField.Root className=" w-36 pl-2">
+              <TextField.Root className=" w-36">
                 <TextField.Input
                   autoComplete="off"
                   size="3"
@@ -159,7 +161,7 @@ const TaskForm = ({ task, teams }: { task?: ({ team: Team | null } & Task) | nul
         <div className=" w-36">{errors.deadline && <ErrorMessage>{errors.deadline.message}</ErrorMessage>}</div>
 
         <div className="flex justify-center pt-6">
-          <button className=" w-28 h-10 cursor-default  rounded-md bg-[#22c55e] font-medium hover:bg-[#4ade80] disabled:cursor-not-allowed disabled:opacity-50" disabled={submitting}>
+          <button className=" w-28 h-10 cursor-default  rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50" disabled={submitting}>
             Submit
           </button>
         </div>
