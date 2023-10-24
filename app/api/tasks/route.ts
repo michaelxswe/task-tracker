@@ -16,10 +16,7 @@ const POST = async (request: NextRequest) => {
   })
 
   if (task) {
-    return NextResponse.json(
-      { ErrorMessage: 'Title already exist' },
-      { status: 403 }
-    )
+    return NextResponse.json({ ErrorMessage: 'Title already exist' }, { status: 403 })
   }
 
   if (body.teamId) {
@@ -28,10 +25,7 @@ const POST = async (request: NextRequest) => {
     })
 
     if (!team) {
-      return NextResponse.json(
-        { ErrorMessage: 'Team not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ ErrorMessage: 'Team not found' }, { status: 404 })
     }
   }
 

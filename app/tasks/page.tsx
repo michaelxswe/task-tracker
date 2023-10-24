@@ -1,5 +1,4 @@
 import prisma from '@/prisma/client'
-import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
 import TasksTable from './_components/TasksTable'
 
@@ -14,9 +13,7 @@ const TasksPage = async () => {
     <div>
       <div className="mb-6">
         <Link href="/tasks/new">
-          <Button size="3" color="iris">
-            Create Task
-          </Button>
+          <button className=" w-28 h-10 cursor-default  rounded-md bg-[#6366f1] font-medium hover:bg-[#818cf8]">Create Task</button>
         </Link>
       </div>
       <TasksTable tasks={tasks} />

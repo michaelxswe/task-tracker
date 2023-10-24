@@ -16,10 +16,7 @@ const POST = async (request: NextRequest) => {
   })
 
   if (team) {
-    return NextResponse.json(
-      { ErrorMessage: 'Name already exist' },
-      { status: 403 }
-    )
+    return NextResponse.json({ ErrorMessage: 'Name already exist' }, { status: 403 })
   }
 
   const newTeam = await prisma.team.create({

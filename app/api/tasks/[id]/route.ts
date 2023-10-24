@@ -3,10 +3,7 @@ import prisma from '@/prisma/client'
 import { Priority, Status, Task } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
 
-const PATCH = async (
-  request: NextRequest,
-  { params: { id } }: { params: { id: string } }
-) => {
+const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const body: Task = await request.json()
 
   const validation = taskSchema.safeParse(body)
@@ -28,10 +25,7 @@ const PATCH = async (
       where: { title: body.title }
     })
     if (existing_title) {
-      return NextResponse.json(
-        { ErrorMessage: 'Title already exist!' },
-        { status: 403 }
-      )
+      return NextResponse.json({ ErrorMessage: 'Title already exist!' }, { status: 403 })
     }
   }
 
@@ -50,10 +44,7 @@ const PATCH = async (
   return NextResponse.json(updatedTask)
 }
 
-const DELETE = async (
-  request: NextRequest,
-  { params: { id } }: { params: { id: string } }
-) => {
+const DELETE = async (request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const task = await prisma.task.findUnique({
     where: {
       id: parseInt(id)

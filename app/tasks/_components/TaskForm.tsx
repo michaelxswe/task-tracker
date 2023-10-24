@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, TextArea, TextField, Select } from '@radix-ui/themes'
+import { TextArea, TextField, Select } from '@radix-ui/themes'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -85,28 +85,15 @@ const TaskForm = ({
         <div className="space-y-2">
           <h5>Title</h5>
           <TextField.Root>
-            <TextField.Input
-              size="3"
-              defaultValue={task?.title}
-              placeholder={taskExample.title}
-              {...register('title')}
-            />
+            <TextField.Input size="3" defaultValue={task?.title} placeholder={taskExample.title} {...register('title')} />
           </TextField.Root>
           {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </div>
 
         <div className="space-y-2">
           <h5>Description</h5>
-          <TextArea
-            className=" h-52"
-            size="3"
-            defaultValue={task?.description}
-            placeholder={taskExample.description}
-            {...register('description')}
-          />
-          {errors.description && (
-            <ErrorMessage>{errors.description.message}</ErrorMessage>
-          )}
+          <TextArea className=" h-52" size="3" defaultValue={task?.description} placeholder={taskExample.description} {...register('description')} />
+          {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
         </div>
 
         <div className="flex  items-center gap-8">
@@ -134,20 +121,12 @@ const TaskForm = ({
           <div className="space-y-2">
             <h5>Status</h5>
             <div>
-              <Select.Root
-                defaultValue={task ? task.status : Status.OPEN}
-                size="3"
-                onValueChange={(value) => setTaskStatus(value as Status)}
-              >
+              <Select.Root defaultValue={task ? task.status : Status.OPEN} size="3" onValueChange={(value) => setTaskStatus(value as Status)}>
                 <Select.Trigger />
                 <Select.Content position="popper">
                   <Select.Item value={Status.OPEN}>Open</Select.Item>
-                  <Select.Item value={Status.IN_PROGRESS}>
-                    In Progress
-                  </Select.Item>
-                  <Select.Item value={Status.HELP_NEEDED}>
-                    Help Needed
-                  </Select.Item>
+                  <Select.Item value={Status.IN_PROGRESS}>In Progress</Select.Item>
+                  <Select.Item value={Status.HELP_NEEDED}>Help Needed</Select.Item>
                   <Select.Item value={Status.CLOSED}>Closed</Select.Item>
                 </Select.Content>
               </Select.Root>
@@ -157,11 +136,7 @@ const TaskForm = ({
           <div className="space-y-2">
             <div>Priority</div>
             <div>
-              <Select.Root
-                defaultValue={task ? task.priority : Priority.MEDIUM}
-                size="3"
-                onValueChange={(value) => setTaskPriority(value as Priority)}
-              >
+              <Select.Root defaultValue={task ? task.priority : Priority.MEDIUM} size="3" onValueChange={(value) => setTaskPriority(value as Priority)}>
                 <Select.Trigger />
                 <Select.Content position="popper">
                   <Select.Item value={Priority.LOW}>Low</Select.Item>
@@ -195,16 +170,12 @@ const TaskForm = ({
           </div>
         </div>
 
-        <div className=" w-36">
-          {errors.deadline && (
-            <ErrorMessage>{errors.deadline.message}</ErrorMessage>
-          )}
-        </div>
+        <div className=" w-36">{errors.deadline && <ErrorMessage>{errors.deadline.message}</ErrorMessage>}</div>
 
         <div className="flex justify-center pt-6">
-          <Button size="3" color="sky" disabled={submitting}>
-            Submit
-          </Button>
+          <button className=" w-28 h-10 cursor-default  rounded-md bg-[#22c55e] font-medium hover:bg-[#4ade80]" disabled={submitting}>
+            Create Task
+          </button>
         </div>
       </form>
     </div>

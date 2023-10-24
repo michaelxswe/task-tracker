@@ -1,7 +1,4 @@
-import {
-  TaskPriorityBadge,
-  TaskStatusBadge
-} from '@/app/tasks/_components/TaskBadge'
+import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/_components/TaskBadge'
 import prisma from '@/prisma/client'
 import { Status } from '@prisma/client'
 import { Card, Grid, Box } from '@radix-ui/themes'
@@ -10,11 +7,7 @@ import { notFound } from 'next/navigation'
 import { DeleteButton } from './_components/DeleteButton'
 import ReactMarkDown from 'react-markdown'
 
-const TaskDetailPage = async ({
-  params: { id }
-}: {
-  params: { id: string }
-}) => {
+const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   const task = await prisma.task.findUnique({
     where: { id: parseInt(id) },
     include: { team: true }
@@ -34,16 +27,7 @@ const TaskDetailPage = async ({
             <TaskPriorityBadge priority={task.priority} />
           </div>
           <div>
-            <p
-              className={`${
-                task.status !== Status.CLOSED &&
-                task.deadline.getTime() <= new Date().getTime()
-                  ? 'pt-1 text-base text-red-700'
-                  : 'pt-1 text-base'
-              }`}
-            >
-              {task.deadline.toDateString()}
-            </p>
+            <p className={`${task.status !== Status.CLOSED && task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
           </div>
         </div>
 
@@ -55,9 +39,7 @@ const TaskDetailPage = async ({
       <Box className=" col-span-2">
         <div className="flex flex-col gap-5">
           <Link href={`/tasks/${id}/edit`} className=" w-full">
-            <button className=" h-10 w-full cursor-default  rounded-md  bg-blue-500 font-medium hover:bg-blue-400">
-              Edit
-            </button>
+            <button className=" h-10 w-full cursor-default  rounded-md  bg-blue-500 font-medium hover:bg-blue-400">Edit</button>
           </Link>
 
           <DeleteButton id={id} />
