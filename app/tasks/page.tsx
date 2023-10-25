@@ -7,10 +7,17 @@ const TasksPage = async () => {
   const tasks = await prisma.task.findMany({
     include: {
       team: true
+    },
+    orderBy: {
+      id: 'asc'
     }
   })
 
-  const teams = await prisma.team.findMany()
+  const teams = await prisma.team.findMany({
+    orderBy: {
+      id: 'asc'
+    }
+  })
 
   return (
     <div>

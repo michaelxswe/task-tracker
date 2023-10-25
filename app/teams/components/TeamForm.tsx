@@ -10,8 +10,6 @@ import { useEffect, useState } from 'react'
 const TeamForm = ({ teams }: { teams: Team[] }) => {
   const router = useRouter()
 
-  const [noTeam, setNoTeam] = useState(false)
-
   const [error, setError] = useState('')
 
   const [option, setOption] = useState<'create' | 'update' | 'delete'>('create')
@@ -25,12 +23,10 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if (teams.length == 0) {
-      setNoTeam(true)
-      setTeamId(undefined)
-    } else {
+    if(teams[0]){
       setTeamId(String(teams[0].id))
     }
+    
   }, [teams])
 
   const onSubmit = async () => {
@@ -94,8 +90,8 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
             </Tabs.Content>
 
             <Tabs.Content value='update'>
-              {noTeam ? (
-                <ErrorMessage>No Team exist</ErrorMessage>
+              {!teams[0] ? (
+                <ErrorMessage>No Team Found</ErrorMessage>
               ) : (
                 <label className='space-y-4'>
                   <div className='flex justify-center'>
@@ -117,8 +113,8 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
             </Tabs.Content>
 
             <Tabs.Content value='delete'>
-              {noTeam ? (
-                <ErrorMessage>No Team exist</ErrorMessage>
+              {!teams[0] ? (
+                <ErrorMessage>No Team Found</ErrorMessage>
               ) : (
                 <label className='space-y-4'>
                   <div className='flex justify-center'>
@@ -144,7 +140,7 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
             <button>Cancle</button>
           </Dialog.Close>
           <Dialog.Close className='cursor-default w-20 rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50'>
-            <button disabled={submitting || (noTeam && (option == "update" || option == "delete"))} onClick={onSubmit}>
+            <button disabled={submitting || (!teams[0] && (option == "update" || option == "delete"))} onClick={onSubmit}>
               Save
             </button>
           </Dialog.Close>
