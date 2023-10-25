@@ -9,7 +9,8 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
   const validation = taskSchema.safeParse(body)
 
   if (!validation.success) {
-    return NextResponse.json(validation.error.format(), { status: 400 })
+    const error = validation.error.errors[0].message
+    return NextResponse.json({error: error}, { status: 400 })
   }
 
   const task = await prisma.task.findUnique({
@@ -17,7 +18,7 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
   })
 
   if (!task) {
-    return NextResponse.json({ error: 'Task cannot be found' }, { status: 404 })
+    return NextResponse.json({error: 'Task cannot be found' }, { status: 404 })
   }
 
   if (body.title != task.title) {
@@ -25,7 +26,7 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
       where: { title: body.title }
     })
     if (existing_title) {
-      return NextResponse.json({ ErrorMessage: 'Title already exist!' }, { status: 403 })
+      return NextResponse.json({error: 'Title already exist!' }, { status: 403 })
     }
   }
 
@@ -52,7 +53,7 @@ const DELETE = async (request: NextRequest, { params: { id } }: { params: { id: 
   })
 
   if (!task) {
-    return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    return NextResponse.json({error: 'Task not found' }, { status: 404 })
   }
 
   await prisma.task.delete({

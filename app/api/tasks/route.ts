@@ -1,14 +1,15 @@
 import prisma from '@/prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
-import { taskSchema } from '../../utils/validationSchemas'
 import { Task, Status, Priority } from '@prisma/client'
+import { taskSchema } from '@/app/utils/validationSchemas'
 
 const POST = async (request: NextRequest) => {
   const body: Task = await request.json()
   const validation = taskSchema.safeParse(body)
 
   if (!validation.success) {
-    return NextResponse.json(validation.error.format(), { status: 400 })
+    const error = validation.error.errors[0].message
+    return NextResponse.json({error: error}, { status: 400 })
   }
 
   const task = await prisma.task.findFirst({
@@ -16,7 +17,7 @@ const POST = async (request: NextRequest) => {
   })
 
   if (task) {
-    return NextResponse.json({ ErrorMessage: 'Title already exist' }, { status: 403 })
+    return NextResponse.json({ error: 'Title already exist' }, { status: 403 })
   }
 
   if (body.teamId) {
@@ -25,7 +26,7 @@ const POST = async (request: NextRequest) => {
     })
 
     if (!team) {
-      return NextResponse.json({ ErrorMessage: 'Team not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Team not found' }, { status: 404 })
     }
   }
 

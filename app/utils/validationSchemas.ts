@@ -7,7 +7,7 @@ const taskSchema = z.object({
 })
 
 const teamSchema = z.object({
-  name: z.string().min(1, 'Invalid name')
+  name: z.string().min(1, 'Name is required').max(10, "Name is too long")
 })
 
 export { taskSchema, teamSchema }
