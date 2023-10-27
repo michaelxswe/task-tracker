@@ -20,27 +20,25 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
     return NextResponse.json({ error: 'Team cannot be found' }, { status: 404 })
   }
 
-  if(body.name != team.name){
+  if (body.name != team.name) {
     const existing_name = await prisma.team.findFirst({
-      where: {name: body.name}
+      where: { name: body.name }
     })
 
-    if(existing_name){
+    if (existing_name) {
       return NextResponse.json({ error: 'Name already exist!' }, { status: 403 })
     }
   }
 
   const updatedTeam = await prisma.team.update({
-    where: {id: team.id},
+    where: { id: team.id },
     data: {
       name: body.name
     }
   })
 
   return NextResponse.json(updatedTeam, { status: 201 })
-
 }
-
 
 const DELETE = async (request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const team = await prisma.team.findUnique({
@@ -49,8 +47,8 @@ const DELETE = async (request: NextRequest, { params: { id } }: { params: { id: 
     }
   })
 
-  if(!team){
-    return NextResponse.json({ error: 'Team not found' }, { status: 404 }) 
+  if (!team) {
+    return NextResponse.json({ error: 'Team not found' }, { status: 404 })
   }
 
   await prisma.team.delete({

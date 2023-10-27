@@ -9,7 +9,7 @@ const POST = async (request: NextRequest) => {
 
   if (!validation.success) {
     const error = validation.error.errors[0].message
-    return NextResponse.json({error: error}, { status: 400 })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 
   const task = await prisma.task.findFirst({

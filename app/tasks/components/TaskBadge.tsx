@@ -16,7 +16,7 @@ const priorityMap: Record<Priority, { label: string; color: 'red' | 'blue' | 'gr
 
 const TaskStatusBadge = ({ status }: { status: Status }) => {
   return (
-    <Badge size="2" color={statusMap[status].color}>
+    <Badge size='2' color={statusMap[status].color}>
       {statusMap[status].label}
     </Badge>
   )
@@ -24,7 +24,7 @@ const TaskStatusBadge = ({ status }: { status: Status }) => {
 
 const TaskPriorityBadge = ({ priority }: { priority: Priority }) => {
   return (
-    <Badge size="2" color={priorityMap[priority].color}>
+    <Badge size='2' color={priorityMap[priority].color}>
       {priorityMap[priority].label}
     </Badge>
   )

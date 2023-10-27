@@ -23,10 +23,9 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if(teams[0]){
+    if (teams[0]) {
       setTeamId(String(teams[0].id))
     }
-    
   }, [teams])
 
   const onSubmit = async () => {
@@ -136,13 +135,13 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
         </Tabs.Root>
 
         <div className='flex gap-3 mt-4  h-10 justify-end'>
-          <Dialog.Close className='cursor-default w-20 rounded-md bg-gray-800 font-medium hover:bg-gray-700' onClick={() => setOpen(false)}>
-            <button>Cancle</button>
-          </Dialog.Close>
           <Dialog.Close className='cursor-default w-20 rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50'>
-            <button disabled={submitting || (!teams[0] && (option == "update" || option == "delete"))} onClick={onSubmit}>
+            <button disabled={submitting || (!teams[0] && (option == 'update' || option == 'delete'))} onClick={onSubmit}>
               Save
             </button>
+          </Dialog.Close>
+          <Dialog.Close className='cursor-default w-20 rounded-md bg-gray-800 font-medium hover:bg-gray-700' onClick={() => setOpen(false)}>
+            <button>Cancle</button>
           </Dialog.Close>
         </div>
       </Dialog.Content>
@@ -150,4 +149,4 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
   )
 }
 
-export default TeamForm
+export { TeamForm }

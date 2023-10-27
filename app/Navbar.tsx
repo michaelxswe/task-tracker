@@ -1,7 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { navLinks } from './index'
+
+interface Link {
+  label: string
+  href: string
+}
+
+const navLinks: Link[] = [
+  { label: 'Dashboard', href: '/' },
+  { label: 'Tasks', href: '/tasks' }
+]
 
 const Navbar = () => {
   return (
