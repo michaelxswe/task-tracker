@@ -14,6 +14,7 @@ interface Props {
     deadlineSortOrder?: 'asc' | 'desc'
     sortFirst?: 'created' | 'deadline'
     late?: 'false' | 'true'
+    title?: string
   }
 }
 
@@ -30,6 +31,7 @@ const TasksPage = async ({ searchParams }: Props) => {
     ],
 
     where: {
+      ...(searchParams.title && { title: { startsWith: searchParams.title, mode: 'insensitive' } }),
       status: searchParams.status,
       priority: searchParams.priority,
       ...(searchParams.teamId && { teamId: parseInt(searchParams.teamId) }),
