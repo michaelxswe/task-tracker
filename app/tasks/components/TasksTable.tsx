@@ -1,7 +1,7 @@
 'use client'
 
 import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/components/TaskBadge'
-import { Status, Task, Team } from '@prisma/client'
+import { Task, Team } from '@prisma/client'
 import { Table } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
 
@@ -45,7 +45,7 @@ const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
               <p className='pt-1 text-base'>{task.createdAt.toDateString()}</p>
             </Table.Cell>
             <Table.Cell>
-              <p className={`${task.status !== Status.CLOSED && task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
+              <p className={`${task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
             </Table.Cell>
           </Table.Row>
         ))}

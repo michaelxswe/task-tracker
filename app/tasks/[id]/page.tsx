@@ -1,6 +1,5 @@
 import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/components/TaskBadge'
 import prisma from '@/prisma/client'
-import { Status } from '@prisma/client'
 import { Card, Grid, Box } from '@radix-ui/themes'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -27,7 +26,7 @@ const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) =>
             <TaskPriorityBadge priority={task.priority} />
           </div>
           <div>
-            <p className={`${task.status !== Status.CLOSED && task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
+            <p className={`${task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
           </div>
         </div>
 

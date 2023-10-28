@@ -19,6 +19,7 @@ interface Props {
 }
 
 const TasksPage = async ({ searchParams }: Props) => {
+
   const tasks = await prisma.task.findMany({
     include: {
       team: true
@@ -35,7 +36,7 @@ const TasksPage = async ({ searchParams }: Props) => {
       status: searchParams.status,
       priority: searchParams.priority,
       ...(searchParams.teamId && { teamId: parseInt(searchParams.teamId) }),
-      ...(searchParams?.late === 'true' && { deadline: { lte: new Date() }, status: { not: Status.CLOSED } })
+      ...(searchParams?.late === 'true' && { deadline: { lte: new Date() } })
     }
   })
 
