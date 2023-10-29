@@ -38,6 +38,8 @@ const HomePage = async () => {
     </Grid>
   )
 }
+
+export const dynamic = 'force-dynamic'
 export default HomePage
 export const metadata: Metadata = {
   title: 'Task Tracker Dashboard',
