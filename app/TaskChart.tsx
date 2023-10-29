@@ -18,12 +18,22 @@ const TaskChart = ({ open, inProgress, helpNeeded, closed }: Props) => {
     { label: 'Closed', value: closed, color: '#3dd68c' }
   ]
 
+  const maxValue = Math.max(...data.map((item) => item.value))
+
+  const generateTicks = (max: number) => {
+    const ticks = []
+    for (let i = 0; i <= max; i++) {
+      ticks.push(i)
+    }
+    return ticks
+  }
+
   return (
     <Card>
       <ResponsiveContainer width='100%' height={300}>
         <BarChart data={data}>
           <XAxis dataKey='label' />
-          <YAxis />
+          <YAxis domain={[0, maxValue]} ticks={generateTicks(maxValue)} />
           <Bar dataKey='value' barSize={60}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
