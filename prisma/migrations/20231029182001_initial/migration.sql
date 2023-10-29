@@ -22,7 +22,7 @@ CREATE TABLE "Task" (
     "deadline" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "teamId" INTEGER NOT NULL,
+    "teamId" INTEGER,
 
     CONSTRAINT "Task_pkey" PRIMARY KEY ("id")
 );
@@ -33,8 +33,5 @@ CREATE UNIQUE INDEX "Team_name_key" ON "Team"("name");
 -- CreateIndex
 CREATE UNIQUE INDEX "Task_title_key" ON "Task"("title");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Task_teamId_key" ON "Task"("teamId");
-
 -- AddForeignKey
-ALTER TABLE "Task" ADD CONSTRAINT "Task_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Task" ADD CONSTRAINT "Task_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE SET NULL ON UPDATE CASCADE;
