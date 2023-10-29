@@ -1,9 +1,9 @@
 'use client'
-import { getQueryParamsUrl } from '@/app/utils/QueryParams'
+
 import { Priority, Status, Team } from '@prisma/client'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Select, Switch, TextField } from '@radix-ui/themes'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const statuses: { label: string; value: Status | 'ALL' }[] = [
   { label: 'All', value: 'ALL' },
@@ -20,11 +20,12 @@ const priorities: { label: string; value: Priority | 'ALL' }[] = [
   { label: 'High', value: Priority.HIGH }
 ]
 
-let queryParams: { [key: string]: string } = {}
-
-let late = 'false'
+let late = false
 
 const TaskFilter = ({ teams }: { teams: Team[] }) => {
+  const searchParams = useSearchParams()
+  const params = new URLSearchParams(searchParams)
+
   const router = useRouter()
 
   return (
@@ -35,13 +36,8 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <div>
             <Select.Root
               onValueChange={(teamId) => {
-                if (teamId !== 'ALL') {
-                  queryParams = { ...queryParams, teamId: teamId }
-                } else {
-                  delete queryParams?.teamId
-                }
-
-                router.push('/tasks' + getQueryParamsUrl(queryParams))
+                teamId === 'ALL' ? params.delete('teamId') : params.set('teamId', teamId)
+                router.push('?' + params.toString())
               }}
               defaultValue={'ALL'}
             >
@@ -62,13 +58,8 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <h5>Status</h5>
           <Select.Root
             onValueChange={(status) => {
-              if (status !== 'ALL') {
-                queryParams = { ...queryParams, status: status }
-              } else {
-                delete queryParams?.status
-              }
-
-              router.push('/tasks' + getQueryParamsUrl(queryParams))
+              status === 'ALL' ? params.delete('status') : params.set('status', status)
+              router.push('?' + params.toString())
             }}
             defaultValue={'ALL'}
           >
@@ -87,13 +78,8 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <h5>Priority</h5>
           <Select.Root
             onValueChange={(priority) => {
-              if (priority !== 'ALL') {
-                queryParams = { ...queryParams, priority: priority }
-              } else {
-                delete queryParams?.priority
-              }
-
-              router.push('/tasks' + getQueryParamsUrl(queryParams))
+              priority === 'ALL' ? params.delete('priority') : params.set('priority', priority)
+              router.push('?' + params.toString())
             }}
             defaultValue={'ALL'}
           >
@@ -112,13 +98,9 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <h5>Created</h5>
           <Select.Root
             onValueChange={(created) => {
-              if (created === 'desc') {
-                queryParams = { ...queryParams, createdSortOrder: 'desc', sortFirst: 'created' }
-              } else {
-                queryParams = { ...queryParams, createdSortOrder: 'asc', sortFirst: 'created' }
-              }
-
-              router.push('/tasks' + getQueryParamsUrl(queryParams))
+              created === 'asc' ? params.set('createdSortInAsc', 'true') : params.delete('createdSortInAsc')
+              params.delete('sortDeadlineFirst')
+              router.push('?' + params.toString())
             }}
             defaultValue={'desc'}
           >
@@ -138,15 +120,11 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <h5>Deadline</h5>
           <Select.Root
             onValueChange={(deadline) => {
-              if (deadline === 'desc') {
-                queryParams = { ...queryParams, deadlineSortOrder: 'desc', sortFirst: 'deadline' }
-              } else {
-                queryParams = { ...queryParams, deadlineSortOrder: 'asc', sortFirst: 'deadline' }
-              }
-
-              router.push('/tasks' + getQueryParamsUrl(queryParams))
+              deadline === 'desc' ? params.set('DeadlineSortInDesc', 'true') : params.delete('DeadlineSortInDesc')
+              params.set('sortDeadlineFirst', 'true')
+              router.push('?' + params.toString())
             }}
-            defaultValue={'desc'}
+            defaultValue={'asc'}
           >
             <Select.Trigger />
             <Select.Content>
@@ -165,9 +143,9 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <Switch
             size='3'
             onClick={() => {
-              late = late === 'false' ? 'true' : 'false'
-              queryParams = { ...queryParams, late: late }
-              router.push('/tasks' + getQueryParamsUrl(queryParams))
+              late = !late
+              late ? params.set('late', late.toString()) : params.delete('late')
+              router.push('?' + params.toString())
             }}
           />
         </div>
@@ -181,8 +159,8 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           size='3'
           placeholder='Search the tasks…'
           onChange={(e) => {
-            queryParams = { ...queryParams, title: e.target.value }
-            router.push('/tasks' + getQueryParamsUrl(queryParams))
+            e.target.value ? params.set('title', e.target.value) : params.delete('title')
+            router.push('?' + params.toString())
           }}
         />
       </TextField.Root>
@@ -190,4 +168,4 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
   )
 }
 
-export { TaskFilter }
+export { TaskFilter}

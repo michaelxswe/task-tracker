@@ -4,21 +4,25 @@ import { TasksTable } from './components/TasksTable'
 import { TeamForm } from '../teams/components/TeamForm'
 import { TaskFilter } from './components/TaskFilter'
 import { Priority, Status } from '@prisma/client'
+import { Pagination } from '../components/Pagination'
 
 interface Props {
   searchParams: {
+    teamId?: string
     status?: Status
     priority?: Priority
-    teamId?: string
-    createdSortOrder?: 'asc' | 'desc'
-    deadlineSortOrder?: 'asc' | 'desc'
-    sortFirst?: 'created' | 'deadline'
-    late?: 'false' | 'true'
+    createdSortInAsc?: string
+    DeadlineSortInDesc?: string
+    sortDeadlineFirst?: string
+    late?: string
     title?: string
+    page?: string
   }
 }
 
 const TasksPage = async ({ searchParams }: Props) => {
+  const currPage = parseInt(searchParams.page || '1')
+  const pageSize = 2
 
   const tasks = await prisma.task.findMany({
     include: {
@@ -26,28 +30,47 @@ const TasksPage = async ({ searchParams }: Props) => {
     },
 
     orderBy: [
-      ...(searchParams.sortFirst && searchParams.sortFirst == 'deadline'
-        ? [{ deadline: searchParams?.deadlineSortOrder ?? 'desc' }, { createdAt: searchParams?.createdSortOrder ?? 'desc' }]
-        : [{ createdAt: searchParams?.createdSortOrder ?? 'desc' }, { deadline: searchParams?.deadlineSortOrder ?? 'desc' }])
+      ...(searchParams.sortDeadlineFirst
+        ? [{ deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }, { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }]
+        : [{ createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }, { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }])
     ],
 
     where: {
-      ...(searchParams.title && { title: { startsWith: searchParams.title, mode: 'insensitive' } }),
-      status: searchParams.status,
-      priority: searchParams.priority,
       ...(searchParams.teamId && { teamId: parseInt(searchParams.teamId) }),
-      ...(searchParams?.late === 'true' && { deadline: { lte: new Date() } })
+      ...(searchParams.status && { status: searchParams.status }),
+      ...(searchParams.priority && { priority: searchParams.priority }),
+      ...(searchParams.title && { title: { startsWith: searchParams.title, mode: 'insensitive' } }),
+      ...(searchParams.late && { deadline: { lte: new Date() } })
+    },
+
+    skip: (currPage - 1) * pageSize,
+    take: pageSize
+  })
+
+  const taskCount = await prisma.task.count({
+    orderBy: [
+      ...(searchParams.sortDeadlineFirst
+        ? [{ deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }, { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }]
+        : [{ createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }, { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }])
+    ],
+
+    where: {
+      ...(searchParams.teamId && { teamId: parseInt(searchParams.teamId) }),
+      ...(searchParams.status && { status: searchParams.status }),
+      ...(searchParams.priority && { priority: searchParams.priority }),
+      ...(searchParams.title && { title: { startsWith: searchParams.title, mode: 'insensitive' } }),
+      ...(searchParams.late && { deadline: { lte: new Date() } })
     }
   })
 
   const teams = await prisma.team.findMany({
     orderBy: {
-      id: 'desc'
+      id: 'asc'
     }
   })
 
   return (
-    <div>
+    <div className=' space-y-4'>
       <div className='mb-6 flex justify-between'>
         <TaskFilter teams={teams} />
         <div className='flex gap-3 items-end'>
@@ -57,7 +80,9 @@ const TasksPage = async ({ searchParams }: Props) => {
           </Link>
         </div>
       </div>
+
       <TasksTable tasks={tasks} />
+      <Pagination itemCount={taskCount} currentPage={currPage} pageSize={pageSize} />
     </div>
   )
 }

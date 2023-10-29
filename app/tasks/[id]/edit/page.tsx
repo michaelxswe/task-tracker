@@ -8,7 +8,12 @@ const TaskEditPage = async ({ params: { id } }: { params: { id: string } }) => {
     include: { team: true }
   })
 
-  const teams = await prisma.team.findMany()
+  const teams = await prisma.team.findMany({
+    orderBy: {
+      id: 'asc'
+    }
+  }
+  )
 
   if (!task) {
     notFound()
