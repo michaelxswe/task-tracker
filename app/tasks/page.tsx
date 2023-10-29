@@ -22,7 +22,7 @@ interface Props {
 
 const TasksPage = async ({ searchParams }: Props) => {
   const currPage = parseInt(searchParams.page || '1')
-  const pageSize = 2
+  const pageSize = 5
 
   const tasks = await prisma.task.findMany({
     include: {

@@ -8,7 +8,7 @@ interface Link {
 }
 
 const navLinks: Link[] = [
-  { label: 'Dashboard', href: '/' },
+  { label: 'Home', href: '/' },
   { label: 'Tasks', href: '/tasks' }
 ]
 
