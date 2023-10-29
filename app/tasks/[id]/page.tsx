@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { DeleteButton } from './components/DeleteButton'
 import ReactMarkDown from 'react-markdown'
+import { Metadata } from 'next'
 
 const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   const task = await prisma.task.findUnique({
@@ -49,3 +50,7 @@ const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) =>
 }
 
 export default TaskDetailPage
+export const metadata: Metadata = {
+  title: 'Task Detail',
+  description: 'View Task Detail'
+}

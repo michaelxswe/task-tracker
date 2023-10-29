@@ -5,6 +5,7 @@ import { TeamForm } from '../teams/components/TeamForm'
 import { TaskFilter } from './components/TaskFilter'
 import { Priority, Status } from '@prisma/client'
 import { Pagination } from '../components/Pagination'
+import { Metadata } from 'next'
 
 interface Props {
   searchParams: {
@@ -88,3 +89,7 @@ const TasksPage = async ({ searchParams }: Props) => {
 }
 
 export default TasksPage
+export const metadata: Metadata = {
+  title: 'Task Tracker List',
+  description: 'List of all tasks'
+}

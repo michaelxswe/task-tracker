@@ -4,6 +4,7 @@ import { TaskSummary } from './TaskSummary'
 import { Status } from '@prisma/client'
 import { TaskChart } from './TaskChart'
 import { Grid } from '@radix-ui/themes'
+import { Metadata } from 'next'
 
 const HomePage = async () => {
   const tasks = await prisma.task.findMany({
@@ -38,3 +39,7 @@ const HomePage = async () => {
   )
 }
 export default HomePage
+export const metadata: Metadata = {
+  title: 'Task Tracker Dashboard',
+  description: 'Summary of all tasks'
+}
