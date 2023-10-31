@@ -1,10 +1,7 @@
-TASK TRACKER PROJECT USING APP ROUTER
-NEXTJS 13 + APP ROUTER + TAILWIND CSS + RADIX UI + PRISMA + POSTGRES + NEXT AUTH
+# TaskFlow Manager
 
-SHORT CUT:
-rafc              :quick start
-ctrl + shift + l  :select all occurence
-ctrl + p:         :find file
-shift + alt + f   :prettier
+<https://task-tracker-self.vercel.app//>
 
-MILESTILE1 : FINISH ALL ESSENTIAL FEATURES DONE
+An advanced task tracking system with full CRUD functionality for effective team and project management, incorporating multi-dimensional sorting, filtering, and search capabilities. Additionally, the system features a real-time task visualization tool on the homepage, offering users an immediate, clear overview of task statuses to facilitate optimal management and prioritization.
+
+![Home](assets/task-tracker.png)
