@@ -73,7 +73,7 @@ const TasksPage = async ({ searchParams }: Props) => {
   return (
     <div className=' space-y-4'>
       <div className='mb-6 flex justify-between'>
-        <TaskFilter teams={teams} />
+        <TaskFilter teams={teams} status = {searchParams.status}/>
         <div className='flex gap-3 items-end'>
           <TeamForm teams={teams} />
           <Link href='/tasks/new'>

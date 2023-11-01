@@ -22,11 +22,17 @@ const priorities: { label: string; value: Priority | 'ALL' }[] = [
 
 let late = false
 
-const TaskFilter = ({ teams }: { teams: Team[] }) => {
+const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
 
   const router = useRouter()
+
+  const applyFilterAndResetPage = (newParams: URLSearchParams) => {
+    // Reset to the first page
+    newParams.set('page', '1')
+    router.push('?' + newParams.toString())
+  }
 
   return (
     <div className='space-y-6'>
@@ -37,7 +43,8 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
             <Select.Root
               onValueChange={(teamId) => {
                 teamId === 'ALL' ? params.delete('teamId') : params.set('teamId', teamId)
-                router.push('?' + params.toString())
+                // router.push('?' + params.toString())
+                applyFilterAndResetPage(params)
               }}
               defaultValue={'ALL'}
             >
@@ -59,9 +66,9 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <Select.Root
             onValueChange={(status) => {
               status === 'ALL' ? params.delete('status') : params.set('status', status)
-              router.push('?' + params.toString())
+              applyFilterAndResetPage(params)
             }}
-            defaultValue={'ALL'}
+            defaultValue={status ? status :'ALL'}
           >
             <Select.Trigger />
             <Select.Content>
@@ -79,7 +86,7 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           <Select.Root
             onValueChange={(priority) => {
               priority === 'ALL' ? params.delete('priority') : params.set('priority', priority)
-              router.push('?' + params.toString())
+              applyFilterAndResetPage(params)
             }}
             defaultValue={'ALL'}
           >
@@ -100,7 +107,7 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
             onValueChange={(created) => {
               created === 'asc' ? params.set('createdSortInAsc', 'true') : params.delete('createdSortInAsc')
               params.delete('sortDeadlineFirst')
-              router.push('?' + params.toString())
+              applyFilterAndResetPage(params)
             }}
             defaultValue={'desc'}
           >
@@ -122,7 +129,7 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
             onValueChange={(deadline) => {
               deadline === 'desc' ? params.set('DeadlineSortInDesc', 'true') : params.delete('DeadlineSortInDesc')
               params.set('sortDeadlineFirst', 'true')
-              router.push('?' + params.toString())
+              applyFilterAndResetPage(params)
             }}
             defaultValue={'asc'}
           >
@@ -145,7 +152,7 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
             onClick={() => {
               late = !late
               late ? params.set('late', late.toString()) : params.delete('late')
-              router.push('?' + params.toString())
+              applyFilterAndResetPage(params)
             }}
           />
         </div>
@@ -160,7 +167,7 @@ const TaskFilter = ({ teams }: { teams: Team[] }) => {
           placeholder='Search the tasks…'
           onChange={(e) => {
             e.target.value ? params.set('title', e.target.value) : params.delete('title')
-            router.push('?' + params.toString())
+            applyFilterAndResetPage(params)
           }}
         />
       </TextField.Root>
