@@ -24,6 +24,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         <Theme appearance='dark' accentColor='blue' className='space-y-5'>
           <Navbar />
           <main className='px-10'>{children}</main>
+          <footer></footer>
         </Theme>
       </body>
     </html>
