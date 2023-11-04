@@ -36,7 +36,7 @@ const POST = async (request: NextRequest) => {
       description: body.description,
       status: body.status as Status,
       priority: body.priority as Priority,
-      deadline: new Date(body.deadline),
+      deadline: validation.data.deadline,
       teamId: body.teamId
     }
   })

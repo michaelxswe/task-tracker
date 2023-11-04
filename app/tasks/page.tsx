@@ -1,11 +1,11 @@
 import prisma from '@/prisma/client'
-import Link from 'next/link'
 import { TasksTable } from './components/TasksTable'
-import { TeamForm } from '../teams/components/TeamForm'
+import { TeamForm } from './components/TeamForm'
 import { TaskFilter } from './components/TaskFilter'
 import { Priority, Status } from '@prisma/client'
-import { Pagination } from '../components/Pagination'
+import { Pagination } from '../components/global/Pagination'
 import { Metadata } from 'next'
+import { CreateTask } from './components/CreateTask'
 
 interface Props {
   searchParams: {
@@ -32,8 +32,14 @@ const TasksPage = async ({ searchParams }: Props) => {
 
     orderBy: [
       ...(searchParams.sortDeadlineFirst
-        ? [{ deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }, { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }]
-        : [{ createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }, { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }])
+        ? [
+            { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' },
+            { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }
+          ]
+        : [
+            { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' },
+            { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }
+          ])
     ],
 
     where: {
@@ -41,7 +47,12 @@ const TasksPage = async ({ searchParams }: Props) => {
       ...(searchParams.status && { status: searchParams.status }),
       ...(searchParams.priority && { priority: searchParams.priority }),
       ...(searchParams.title && { title: { startsWith: searchParams.title, mode: 'insensitive' } }),
-      ...(searchParams.late && { deadline: { lte: new Date() } })
+      ...(searchParams.late && {
+        deadline: { lte: new Date() },
+        status: searchParams.status
+          ? { not: Status.CLOSED, equals: searchParams.status }
+          : { not: Status.CLOSED }
+      })
     },
 
     skip: (currPage - 1) * pageSize,
@@ -51,8 +62,14 @@ const TasksPage = async ({ searchParams }: Props) => {
   const taskCount = await prisma.task.count({
     orderBy: [
       ...(searchParams.sortDeadlineFirst
-        ? [{ deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }, { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }]
-        : [{ createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }, { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }])
+        ? [
+            { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' },
+            { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' }
+          ]
+        : [
+            { createdAt: (searchParams.createdSortInAsc ? 'asc' : 'desc') as 'desc' | 'asc' },
+            { deadline: (searchParams.DeadlineSortInDesc ? 'desc' : 'asc') as 'desc' | 'asc' }
+          ])
     ],
 
     where: {
@@ -60,7 +77,12 @@ const TasksPage = async ({ searchParams }: Props) => {
       ...(searchParams.status && { status: searchParams.status }),
       ...(searchParams.priority && { priority: searchParams.priority }),
       ...(searchParams.title && { title: { startsWith: searchParams.title, mode: 'insensitive' } }),
-      ...(searchParams.late && { deadline: { lte: new Date() } })
+      ...(searchParams.late && {
+        deadline: { lte: new Date() },
+        status: searchParams.status
+          ? { not: Status.CLOSED, equals: searchParams.status }
+          : { not: Status.CLOSED }
+      })
     }
   })
 
@@ -71,17 +93,14 @@ const TasksPage = async ({ searchParams }: Props) => {
   })
 
   return (
-    <div className=' space-y-4'>
-      <div className='mb-6 flex justify-between'>
-        <TaskFilter teams={teams} status = {searchParams.status}/>
-        <div className='flex gap-3 items-end'>
+    <div className='space-y-5'>
+      <div className='flex justify-between'>
+        <TaskFilter teams={teams} status={searchParams.status} />
+        <div className='flex gap-5 items-end'>
+          <CreateTask />
           <TeamForm teams={teams} />
-          <Link href='/tasks/new'>
-            <button className=' w-28 h-10 cursor-default  rounded-md bg-[#0077ff3a] font-medium hover:bg-[#0077ff5a]'>Create Task</button>
-          </Link>
         </div>
       </div>
-
       <TasksTable tasks={tasks} />
       <Pagination itemCount={taskCount} currentPage={currPage} pageSize={pageSize} />
     </div>

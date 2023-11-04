@@ -13,8 +13,7 @@ const TaskEditPage = async ({ params: { id } }: { params: { id: string } }) => {
     orderBy: {
       id: 'asc'
     }
-  }
-  )
+  })
 
   if (!task) {
     notFound()

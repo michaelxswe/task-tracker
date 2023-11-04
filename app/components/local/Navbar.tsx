@@ -14,9 +14,9 @@ const navLinks: Link[] = [
 
 const Navbar = () => {
   return (
-    <nav className='mb-6 flex h-16 items-center gap-6 border-b px-6'>
+    <nav className='flex h-20 items-center gap-5 border-b px-10'>
       {navLinks.map((link) => (
-        <Link href={link.href} key={link.href} className='rounded px-2 py-2 transition-colors duration-200 hover:bg-gray-800'>
+        <Link href={link.href} key={link.href} className='rounded px-3 py-3 transition-colors duration-200 hover:bg-gray-800'>
           {link.label}
         </Link>
       ))}

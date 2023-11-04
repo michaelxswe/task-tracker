@@ -37,7 +37,7 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
       description: body.description,
       status: body.status as Status,
       priority: body.priority as Priority,
-      deadline: new Date(body.deadline),
+      deadline: validation.data.deadline,
       teamId: body.teamId
     }
   })

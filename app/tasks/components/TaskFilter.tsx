@@ -22,53 +22,50 @@ const priorities: { label: string; value: Priority | 'ALL' }[] = [
 
 let late = false
 
-const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
+const TaskFilter = ({ teams, status }: { teams: Team[]; status?: Status }) => {
+  
   const searchParams = useSearchParams()
   const params = new URLSearchParams(searchParams)
 
   const router = useRouter()
 
-  const applyFilterAndResetPage = (newParams: URLSearchParams) => {
-    // Reset to the first page
+  const applyFilter = (newParams: URLSearchParams) => {
     newParams.set('page', '1')
     router.push('?' + newParams.toString())
   }
 
   return (
-    <div className='space-y-6'>
-      <div className='flex gap-6'>
-        <div className='space-y-3'>
+    <div className='space-y-5'>
+      <div className='flex gap-10'>
+        <div className='flex flex-col gap-2 justify-center'>
           <div>Team</div>
-          <div>
-            <Select.Root
-              onValueChange={(teamId) => {
-                teamId === 'ALL' ? params.delete('teamId') : params.set('teamId', teamId)
-                // router.push('?' + params.toString())
-                applyFilterAndResetPage(params)
-              }}
-              defaultValue={'ALL'}
-            >
-              <Select.Trigger />
-              <Select.Content position='popper'>
-                <Select.Item value={'ALL'}>All</Select.Item>
-                {teams.map((team) => (
-                  <Select.Item key={team.id} value={String(team.id)}>
-                    {team.name}
-                  </Select.Item>
-                ))}
-              </Select.Content>
-            </Select.Root>
-          </div>
+          <Select.Root
+            onValueChange={(teamId) => {
+              teamId === 'ALL' ? params.delete('teamId') : params.set('teamId', teamId)
+              applyFilter(params)
+            }}
+            defaultValue={'ALL'}
+          >
+            <Select.Trigger />
+            <Select.Content position='popper'>
+              <Select.Item value={'ALL'}>All</Select.Item>
+              {teams.map((team) => (
+                <Select.Item key={team.id} value={String(team.id)}>
+                  {team.name}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Root>
         </div>
 
-        <div className='space-y-3'>
-          <h5>Status</h5>
+        <div className='flex flex-col gap-2 justify-center'>
+          <div>Status</div>
           <Select.Root
             onValueChange={(status) => {
               status === 'ALL' ? params.delete('status') : params.set('status', status)
-              applyFilterAndResetPage(params)
+              applyFilter(params)
             }}
-            defaultValue={status ? status :'ALL'}
+            defaultValue={status || 'ALL'}
           >
             <Select.Trigger />
             <Select.Content>
@@ -81,12 +78,12 @@ const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
           </Select.Root>
         </div>
 
-        <div className='space-y-3'>
-          <h5>Priority</h5>
+        <div className='flex flex-col gap-2 justify-center'>
+          <div>Priority</div>
           <Select.Root
             onValueChange={(priority) => {
               priority === 'ALL' ? params.delete('priority') : params.set('priority', priority)
-              applyFilterAndResetPage(params)
+              applyFilter(params)
             }}
             defaultValue={'ALL'}
           >
@@ -101,13 +98,13 @@ const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
           </Select.Root>
         </div>
 
-        <div className='space-y-3'>
-          <h5>Created</h5>
+        <div className='flex flex-col gap-2 justify-center'>
+          <div>Created</div>
           <Select.Root
             onValueChange={(created) => {
               created === 'asc' ? params.set('createdSortInAsc', 'true') : params.delete('createdSortInAsc')
               params.delete('sortDeadlineFirst')
-              applyFilterAndResetPage(params)
+              applyFilter(params)
             }}
             defaultValue={'desc'}
           >
@@ -123,13 +120,13 @@ const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
           </Select.Root>
         </div>
 
-        <div className='space-y-3'>
-          <h5>Deadline</h5>
+        <div className='flex flex-col gap-2 justify-center'>
+          <div>Deadline</div>
           <Select.Root
             onValueChange={(deadline) => {
               deadline === 'desc' ? params.set('DeadlineSortInDesc', 'true') : params.delete('DeadlineSortInDesc')
               params.set('sortDeadlineFirst', 'true')
-              applyFilterAndResetPage(params)
+              applyFilter(params)
             }}
             defaultValue={'asc'}
           >
@@ -145,14 +142,14 @@ const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
           </Select.Root>
         </div>
 
-        <div className=' space-y-4'>
-          <h5>Late</h5>
+        <div className='flex flex-col gap-2 justify-center'>
+          <div>Late</div>
           <Switch
             size='3'
             onClick={() => {
               late = !late
               late ? params.set('late', late.toString()) : params.delete('late')
-              applyFilterAndResetPage(params)
+              applyFilter(params)
             }}
           />
         </div>
@@ -160,14 +157,14 @@ const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
 
       <TextField.Root>
         <TextField.Slot>
-          <MagnifyingGlassIcon height='16' width='16' />
+          <MagnifyingGlassIcon height='20' width='20' />
         </TextField.Slot>
         <TextField.Input
           size='3'
           placeholder='Search the tasks…'
           onChange={(e) => {
             e.target.value ? params.set('title', e.target.value) : params.delete('title')
-            applyFilterAndResetPage(params)
+            applyFilter(params)
           }}
         />
       </TextField.Root>
@@ -175,4 +172,4 @@ const TaskFilter = ({ teams, status }: { teams: Team[], status?: Status }) => {
   )
 }
 
-export { TaskFilter}
+export { TaskFilter }

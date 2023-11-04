@@ -24,10 +24,10 @@ const Pagination = ({ itemCount, pageSize, currentPage }: Props) => {
   }
 
   return (
-    <div className='flex items-center gap-3 justify-end'>
-      <h5>
+    <div className='flex items-center gap-2 justify-end'>
+      <span>
         Page {currentPage} of {pageCount}
-      </h5>
+      </span>
       <Button color='gray' variant='soft' disabled={currentPage == 1} onClick={() => changePage(currentPage - 1)}>
         <ChevronLeftIcon />
       </Button>

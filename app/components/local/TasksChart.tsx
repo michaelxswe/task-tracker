@@ -10,7 +10,7 @@ interface Props {
   closed: number
 }
 
-const TaskChart = ({ open, inProgress, helpNeeded, closed }: Props) => {
+const TasksChart = ({ open, inProgress, helpNeeded, closed }: Props) => {
   const data = [
     { label: 'Open', value: open, color: '#ff9592' },
     { label: 'In Progress', value: inProgress, color: '#70b8ff' },
@@ -20,20 +20,12 @@ const TaskChart = ({ open, inProgress, helpNeeded, closed }: Props) => {
 
   const maxValue = Math.max(...data.map((item) => item.value))
 
-  const generateTicks = (max: number) => {
-    const ticks = []
-    for (let i = 0; i <= max; i++) {
-      ticks.push(i)
-    }
-    return ticks
-  }
-
   return (
     <Card>
-      <ResponsiveContainer width='100%' height={300}>
+      <ResponsiveContainer width='100%' height={400}>
         <BarChart data={data}>
           <XAxis dataKey='label' />
-          <YAxis domain={[0, maxValue]} ticks={generateTicks(maxValue)} />
+          <YAxis domain={[0, maxValue]} ticks={Array.from(Array(maxValue+1).keys())} />
           <Bar dataKey='value' barSize={60}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
@@ -45,4 +37,4 @@ const TaskChart = ({ open, inProgress, helpNeeded, closed }: Props) => {
   )
 }
 
-export { TaskChart }
+export { TasksChart }

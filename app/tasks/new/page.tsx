@@ -12,7 +12,6 @@ const NewTaskPage = async () => {
   return <TaskForm teams={teams} />
 }
 
-
 export const dynamic = 'force-dynamic'
 export default NewTaskPage
 

@@ -1,11 +1,11 @@
 'use client'
 
-import { ErrorMessage } from '@/app/components/ErrorMessage'
+import axios from 'axios'
+import { ErrorMessage } from '@/app/components/global/ErrorMessage'
 import { Team } from '@prisma/client'
 import { Dialog, Select, Tabs, TextField } from '@radix-ui/themes'
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const TeamForm = ({ teams }: { teams: Team[] }) => {
   const router = useRouter()
@@ -14,19 +14,15 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
 
   const [option, setOption] = useState<'create' | 'update' | 'delete'>('create')
 
-  const [teamId, setTeamId] = useState<string | undefined>()
+  const [teamId, setTeamId] = useState<string | undefined>(
+    teams[0]?.id ? String(teams[0].id) : undefined
+  )
 
   const [open, setOpen] = useState(false)
 
   const [name, setName] = useState('')
 
   const [submitting, setSubmitting] = useState(false)
-
-  useEffect(() => {
-    if (teams[0]) {
-      setTeamId(String(teams[0].id))
-    }
-  }, [teams])
 
   const onSubmit = async () => {
     try {
@@ -55,46 +51,53 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
 
   return (
     <Dialog.Root open={open}>
-      <Dialog.Trigger
-        onClick={() => {
-          setOpen(true)
-          setError('')
-        }}
-      >
-        <button className=' w-28 h-10 cursor-default rounded-md bg-[#0077ff3a] font-medium hover:bg-[#0077ff5a]'>Team</button>
+      <Dialog.Trigger>
+        <button
+          onClick={() => {
+            setOpen(true)
+          }}
+          className='w-28 h-10 rounded-md bg-[#0077ff3a] font-medium hover:bg-[#0077ff5a]'
+        >
+          Team
+        </button>
       </Dialog.Trigger>
-      <Dialog.Content style={{ maxWidth: 450 }}>
+      <Dialog.Content style={{ maxWidth: 400 }}>
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <Tabs.Root defaultValue='create' onValueChange={(value) => setOption(value as 'create' | 'update' | 'delete')}>
+        <Tabs.Root
+          defaultValue='create'
+          onValueChange={(value) => setOption(value as 'create' | 'update' | 'delete')}
+        >
           <Tabs.List>
             <Tabs.Trigger value='create'>
-              <div className=' text-lg'>Create</div>
+              <div className='text-lg'>Create</div>
             </Tabs.Trigger>
             <Tabs.Trigger value='update'>
-              <div className=' text-lg'>Update</div>
+              <div className='text-lg'>Update</div>
             </Tabs.Trigger>
             <Tabs.Trigger value='delete'>
-              <div className=' text-lg'>Delete</div>
+              <div className='text-lg'>Delete</div>
             </Tabs.Trigger>
           </Tabs.List>
 
-          <div className='space-x-4 pt-3 pb-2 mt-3'>
+          <div className='pt-5 pb-5'>
             <Tabs.Content value='create'>
-              <label>
-                <div className='space-y-2'>
-                  <div>Team Name</div>
-                  <TextField.Input onChange={(e) => setName(e.target.value)} />
-                </div>
-              </label>
+              <div className='space-y-2'>
+                <div>Team Name</div>
+                <TextField.Input onChange={(e) => setName(e.target.value)} />
+              </div>
             </Tabs.Content>
 
             <Tabs.Content value='update'>
               {!teams[0] ? (
                 <ErrorMessage>No Team Found</ErrorMessage>
               ) : (
-                <label className='space-y-4'>
+                <div className='space-y-2'>
                   <div className='flex justify-center'>
-                    <Select.Root size='3' defaultValue={String(teams[0]?.id)} onValueChange={(value) => setTeamId(value)}>
+                    <Select.Root
+                      size='3'
+                      defaultValue={String(teams[0]?.id)}
+                      onValueChange={(value) => setTeamId(value)}
+                    >
                       <Select.Trigger />
                       <Select.Content position='popper'>
                         {teams.map((team) => (
@@ -105,9 +108,9 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
                       </Select.Content>
                     </Select.Root>
                   </div>
-                  <div>New Team Name</div>
+                  <label className='block'>New Team Name</label>
                   <TextField.Input onChange={(e) => setName(e.target.value)} />
-                </label>
+                </div>
               )}
             </Tabs.Content>
 
@@ -115,33 +118,44 @@ const TeamForm = ({ teams }: { teams: Team[] }) => {
               {!teams[0] ? (
                 <ErrorMessage>No Team Found</ErrorMessage>
               ) : (
-                <label className='space-y-4'>
-                  <div className='flex justify-center'>
-                    <Select.Root size='3' defaultValue={String(teams[0]?.id)} onValueChange={(value) => setTeamId(value)}>
-                      <Select.Trigger />
-                      <Select.Content position='popper'>
-                        {teams.map((team) => (
-                          <Select.Item key={team.id} value={String(team.id)}>
-                            {team.name}
-                          </Select.Item>
-                        ))}
-                      </Select.Content>
-                    </Select.Root>
-                  </div>
-                </label>
+                <div className='flex justify-center'>
+                  <Select.Root
+                    size='3'
+                    defaultValue={String(teams[0]?.id)}
+                    onValueChange={(value) => setTeamId(value)}
+                  >
+                    <Select.Trigger />
+                    <Select.Content position='popper'>
+                      {teams.map((team) => (
+                        <Select.Item key={team.id} value={String(team.id)}>
+                          {team.name}
+                        </Select.Item>
+                      ))}
+                    </Select.Content>
+                  </Select.Root>
+                </div>
               )}
             </Tabs.Content>
           </div>
         </Tabs.Root>
 
-        <div className='flex gap-3 mt-4  h-10 justify-end'>
-          <Dialog.Close className='cursor-default w-20 rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50'>
-            <button disabled={submitting || (!teams[0] && (option == 'update' || option == 'delete'))} onClick={onSubmit}>
+        <div className='flex gap-5 justify-end'>
+          <Dialog.Close>
+            <button
+              disabled={submitting || (!teams[0] && (option == 'update' || option == 'delete'))}
+              onClick={onSubmit}
+              className='w-20 h-10 rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50'
+            >
               Save
             </button>
           </Dialog.Close>
-          <Dialog.Close className='cursor-default w-20 rounded-md bg-gray-800 font-medium hover:bg-gray-700' onClick={() => setOpen(false)}>
-            <button>Cancle</button>
+          <Dialog.Close>
+            <button
+              onClick={() => setOpen(false)}
+              className='w-20 h-10 rounded-md bg-gray-800 font-medium hover:bg-gray-700'
+            >
+              Cancle
+            </button>
           </Dialog.Close>
         </div>
       </Dialog.Content>

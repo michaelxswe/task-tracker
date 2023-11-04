@@ -1,11 +1,12 @@
 'use client'
 
 import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/components/TaskBadge'
-import { Task, Team } from '@prisma/client'
+import { Status, Task, Team } from '@prisma/client'
 import { Table } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
 
 const taskTableFields = ['Task', 'Team', 'Status', 'Priority', 'Created', 'Deadline']
+
 const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
   const router = useRouter()
 
@@ -23,17 +24,17 @@ const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
       <Table.Body>
         {tasks.map((task) => (
           <Table.Row
-            className='transition-colors duration-200 hover:bg-gray-800'
+            className='transition-colors duration-200 hover:bg-gray-800 cursor-pointer'
             key={task.id}
             onClick={() => {
               router.push(`/tasks/${task.id}`)
             }}
           >
             <Table.Cell>
-              <p className='pt-1 text-base'>{task.title}</p>
+              <p className='pt-1'>{task.title}</p>
             </Table.Cell>
             <Table.Cell>
-              <p className='pt-1 text-base'>{task?.team?.name}</p>
+              <p className='pt-1'>{task?.team?.name}</p>
             </Table.Cell>
             <Table.Cell>
               <TaskStatusBadge status={task.status} />
@@ -42,10 +43,16 @@ const TasksTable = ({ tasks }: { tasks: ({ team: Team | null } & Task)[] }) => {
               <TaskPriorityBadge priority={task.priority} />
             </Table.Cell>
             <Table.Cell>
-              <p className='pt-1 text-base'>{task.createdAt.toDateString()}</p>
+              <p className='pt-1'>{task.createdAt.toDateString()}</p>
             </Table.Cell>
             <Table.Cell>
-              <p className={`${task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
+              <p
+                className={`${
+                  task.deadline.getTime() <= new Date().getTime() && task.status !== Status.CLOSED ? 'pt-1 text-red-700' : 'pt-1'
+                }`}
+              >
+                {task.deadline.toDateString()}
+              </p>
             </Table.Cell>
           </Table.Row>
         ))}

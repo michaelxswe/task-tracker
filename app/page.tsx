@@ -1,15 +1,14 @@
 import prisma from '@/prisma/client'
-import { LatestTasks } from './LatestTasks'
-import { TaskSummary } from './TaskSummary'
+import { LatestTasks } from './components/local/LatestTasks'
+import { TasksCard } from './components/local/TasksCard'
 import { Status } from '@prisma/client'
-import { TaskChart } from './TaskChart'
-import { Grid } from '@radix-ui/themes'
+import { TasksChart } from './components/local/TasksChart'
 import { Metadata } from 'next'
 
 const HomePage = async () => {
   const tasks = await prisma.task.findMany({
     orderBy: { createdAt: 'desc' },
-    take: 7
+    take: 5
   })
 
   const open = await prisma.task.count({
@@ -29,13 +28,15 @@ const HomePage = async () => {
   })
 
   return (
-    <Grid columns='2' gap='9' mt='9'>
-      <div className=' flex-col space-y-9'>
-        <TaskSummary open={open} inProgress={inProgress} helpNeeded={helpNeeded} closed={closed}></TaskSummary>
-        <TaskChart open={open} inProgress={inProgress} helpNeeded={helpNeeded} closed={closed}></TaskChart>
+    <div className='grid grid-cols-12 gap-10'>
+      <div className='space-y-10 col-span-8'>
+        <TasksCard open={open} inProgress={inProgress} helpNeeded={helpNeeded} closed={closed}></TasksCard>
+        <TasksChart open={open} inProgress={inProgress} helpNeeded={helpNeeded} closed={closed}></TasksChart>
       </div>
-      <LatestTasks tasks={tasks} />
-    </Grid>
+      <div className='col-span-4'>
+        <LatestTasks tasks={tasks} />
+      </div>
+    </div>
   )
 }
 

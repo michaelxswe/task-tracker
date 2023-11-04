@@ -11,7 +11,7 @@ interface Props {
   closed: number
 }
 
-const TaskSummary = ({ open, inProgress, helpNeeded, closed }: Props) => {
+const TasksCard = ({ open, inProgress, helpNeeded, closed }: Props) => {
   const containers: { label: string; value: number; status: Status; color: 'red' | 'blue' | 'orange' | 'green' }[] = [
     { label: 'Open', value: open, status: Status.OPEN, color: 'red' },
     { label: 'In Progress', value: inProgress, status: Status.IN_PROGRESS, color: 'blue' },
@@ -20,19 +20,15 @@ const TaskSummary = ({ open, inProgress, helpNeeded, closed }: Props) => {
   ]
 
   return (
-    <div className='flex gap-5'>
+    <div className=' flex gap-10'>
       {containers.map((container) => (
-        <Card className='transition-colors duration-200 hover:bg-gray-800' key={container.label}>
+        <Card className='transition-colors duration-200 hover:bg-gray-800 border w-32' key={container.label}>
           <Link href={`/tasks?status=${container.status}`}>
-            <div className='space-y-2'>
-              <div>
-                <Text color={container.color}>{container.label}</Text>
-              </div>
-              <div>
-                <Text size='5' color={container.color} className='font-bold'>
-                  {container.value}
-                </Text>
-              </div>
+            <div className='flex flex-col gap-2 justify-center items-center'>
+              <Text color={container.color}>{container.label}</Text>
+              <Text size='5' color={container.color} className='font-bold'>
+                {container.value}
+              </Text>
             </div>
           </Link>
         </Card>
@@ -41,4 +37,4 @@ const TaskSummary = ({ open, inProgress, helpNeeded, closed }: Props) => {
   )
 }
 
-export { TaskSummary }
+export { TasksCard }

@@ -1,11 +1,12 @@
-import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/components/TaskBadge'
-import prisma from '@/prisma/client'
-import { Card, Grid, Box } from '@radix-ui/themes'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { DeleteButton } from './components/DeleteButton'
 import ReactMarkDown from 'react-markdown'
+import prisma from '@/prisma/client'
+import { TaskPriorityBadge, TaskStatusBadge } from '@/app/tasks/components/TaskBadge'
+import { Card } from '@radix-ui/themes'
+import { notFound } from 'next/navigation'
+import { DeleteTask } from './components/DeleteTask'
 import { Metadata } from 'next'
+import { Status } from '@prisma/client'
+import { EditTask } from './components/EditTask'
 
 const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   const task = await prisma.task.findUnique({
@@ -18,17 +19,24 @@ const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) =>
   }
 
   return (
-    <Grid columns='6' gap='8'>
-      <div className=' col-span-4'>
-        <h1 className=' text-3xl font-bold'>{task.title}</h1>
-        <div className='mb-4 mt-4 flex items-center justify-between'>
-          <div className='flex gap-4'>
+    <div className='grid grid-cols-12 gap-20'>
+      <div className='col-span-8 space-y-5'>
+        <h1 className='text-3xl font-bold'>{task.title}</h1>
+
+        <div className='flex items-center justify-between'>
+          <div className=' space-x-5'>
             <TaskStatusBadge status={task.status} />
             <TaskPriorityBadge priority={task.priority} />
           </div>
-          <div>
-            <p className={`${task.deadline.getTime() <= new Date().getTime() ? 'pt-1 text-base text-red-700' : 'pt-1 text-base'}`}>{task.deadline.toDateString()}</p>
-          </div>
+          <p
+            className={`${
+              task.deadline.getTime() <= new Date().getTime() &&
+              task.status !== Status.CLOSED &&
+              'text-red-700'
+            }`}
+          >
+            {task.deadline.toDateString()}
+          </p>
         </div>
 
         <Card className='prose max-w-full text-white'>
@@ -36,16 +44,13 @@ const TaskDetailPage = async ({ params: { id } }: { params: { id: string } }) =>
         </Card>
       </div>
 
-      <div className=' col-span-2'>
-        <div className='flex flex-col gap-5'>
-          <Link href={`/tasks/${id}/edit`} className=' w-full'>
-            <button className=' h-10 w-full cursor-default  rounded-md  bg-[#172554] font-medium hover:bg-[#273466]'>Edit</button>
-          </Link>
-
-          <DeleteButton id={id} />
+      <div className='col-span-4'>
+        <div className='space-y-5'>
+          <EditTask id={id} />
+          <DeleteTask id={id} />
         </div>
       </div>
-    </Grid>
+    </div>
   )
 }
 

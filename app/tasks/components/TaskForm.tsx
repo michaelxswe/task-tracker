@@ -1,13 +1,12 @@
 'use client'
 
+import axios from 'axios'
 import { TextArea, TextField, Select } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { Priority, Status, Task, Team } from '@prisma/client'
-import { convertToUTC } from '@/app/utils/timeCoversion'
 import { useState } from 'react'
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import { ErrorMessage } from '@/app/components/ErrorMessage'
+import { ErrorMessage } from '@/app/components/global/ErrorMessage'
 
 const TaskForm = ({ task, teams }: { task?: ({ team: Team | null } & Task) | null; teams: Team[] }) => {
   const router = useRouter()
@@ -44,43 +43,41 @@ const TaskForm = ({ task, teams }: { task?: ({ team: Team | null } & Task) | nul
   })
 
   return (
-    <div className='mt-6 space-y-4 px-40'>
-      <form className='space-y-4' onSubmit={onSubmit}>
+    <div className='px-40'>
+      <form className='space-y-5' onSubmit={onSubmit}>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <div className='space-y-2'>
-          <h5>Title</h5>
+          <label>Title</label>
           <TextField.Input className='text-center' size='3' defaultValue={task?.title} {...register('title')} />
         </div>
 
         <div className='space-y-2'>
-          <h5>Description</h5>
-          <TextArea className='h-52' size='3' defaultValue={task?.description} {...register('description')} />
+          <label>Description</label>
+          <TextArea className='h-64' size='3' defaultValue={task?.description} {...register('description')} />
         </div>
 
-        <div className='flex gap-8'>
+        <div className='flex gap-5'>
           <div className='space-y-2'>
-            <h5>Deadline</h5>
-            <div className=''>
-              <TextField.Root className='w-32'>
-                <TextField.Input
-                  autoComplete='off'
-                  size='3'
-                  defaultValue={task?.deadline.toLocaleDateString('en-US', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                  })}
-                  placeholder='MM/DD/YYYY'
-                  {...register('deadline', {
-                    setValueAs: (value) => convertToUTC(value, 23, 59)
-                  })}
-                />
-              </TextField.Root>
-            </div>
+            <label>Deadline</label>
+              <TextField.Input
+                className='text-center'
+                autoComplete='off'
+                size='3'
+                defaultValue={task?.deadline.toLocaleDateString('en-US', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric'
+                })}
+                placeholder='MM/DD/YYYY'
+                // {...register('deadline', {
+                //   setValueAs: (value) => transform(value)
+                // })}
+                {...register('deadline')}
+              />
           </div>
 
           <div className='space-y-2'>
-            <h5>Status</h5>
+            <label>Status</label>
             <div>
               <Select.Root
                 defaultValue={task ? task.status : Status.OPEN}
@@ -138,8 +135,8 @@ const TaskForm = ({ task, teams }: { task?: ({ team: Team | null } & Task) | nul
           </div>
         </div>
 
-        <div className='flex justify-center pt-6'>
-          <button className=' w-28 h-10 cursor-default  rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50' disabled={submitting}>
+        <div className='flex justify-center'>
+          <button className='w-28 h-10 rounded-md bg-[#134e4a] font-medium hover:bg-[#2a6a66] disabled:cursor-not-allowed disabled:opacity-50' disabled={submitting}>
             Submit
           </button>
         </div>
