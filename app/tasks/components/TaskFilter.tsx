@@ -41,7 +41,7 @@ const TaskFilter = ({ teams, status }: { teams: Team[]; status?: Status }) => {
           <div>Team</div>
           <Select.Root
             onValueChange={(teamId) => {
-              teamId === 'ALL' ? params.delete('teamId') : params.set('teamId', teamId)
+              teamId === 'ALL' ? params.delete('team-id') : params.set('team-id', teamId)
               applyFilter(params)
             }}
             defaultValue={'ALL'}
@@ -102,8 +102,8 @@ const TaskFilter = ({ teams, status }: { teams: Team[]; status?: Status }) => {
           <div>Created</div>
           <Select.Root
             onValueChange={(created) => {
-              created === 'asc' ? params.set('createdSortInAsc', 'true') : params.delete('createdSortInAsc')
-              params.delete('sortDeadlineFirst')
+              created === 'asc' ? params.set('created-asc', 'true') : params.delete('created-asc')
+              params.delete('sort-deadline-first')
               applyFilter(params)
             }}
             defaultValue={'desc'}
@@ -124,8 +124,8 @@ const TaskFilter = ({ teams, status }: { teams: Team[]; status?: Status }) => {
           <div>Deadline</div>
           <Select.Root
             onValueChange={(deadline) => {
-              deadline === 'desc' ? params.set('DeadlineSortInDesc', 'true') : params.delete('DeadlineSortInDesc')
-              params.set('sortDeadlineFirst', 'true')
+              deadline === 'desc' ? params.set('deadline-desc', 'true') : params.delete('deadline-desc')
+              params.set('sort-deadline-first', 'true')
               applyFilter(params)
             }}
             defaultValue={'asc'}
