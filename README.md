@@ -4,4 +4,4 @@
 
  An comprehensive task tracker, enabling robust task and team management.
 
-![Home](assets/task-tracker.PNG)
+![Home](github/task-tracker.PNG)
