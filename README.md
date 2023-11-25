@@ -1,5 +1,5 @@
 # TaskFlow Manager
 
-An comprehensive task tracker, enabling robust task and team management.
+A cross team compatible task tracker
 
 <https://task-tracker-self.vercel.app>
