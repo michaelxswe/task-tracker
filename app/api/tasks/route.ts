@@ -1,7 +1,7 @@
-import prisma from '@/prisma/client'
-import { NextRequest, NextResponse } from 'next/server'
-import { Task, Status, Priority } from '@prisma/client'
-import { taskSchema } from '@/app/utils/validationSchemas'
+import prisma from "@/prisma/client"
+import { NextRequest, NextResponse } from "next/server"
+import { Task, Status, Priority } from "@prisma/client"
+import { taskSchema } from "@/app/utils/validationSchemas"
 
 const POST = async (request: NextRequest) => {
   const body: Task = await request.json()
@@ -17,7 +17,7 @@ const POST = async (request: NextRequest) => {
   })
 
   if (task) {
-    return NextResponse.json({ error: 'Title already exist' }, { status: 403 })
+    return NextResponse.json({ error: "Title already exist" }, { status: 403 })
   }
 
   if (body.teamId) {
@@ -26,7 +26,7 @@ const POST = async (request: NextRequest) => {
     })
 
     if (!team) {
-      return NextResponse.json({ error: 'Team not found' }, { status: 404 })
+      return NextResponse.json({ error: "Team not found" }, { status: 404 })
     }
   }
 

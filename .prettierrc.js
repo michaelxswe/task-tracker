@@ -1,7 +1,14 @@
 module.exports = {
-  singleQuote: true,
+  singleQuote: false,
   semi: false,
-  trailingComma: 'none',
+  trailingComma: "none",
   printWidth: 100,
-  jsxSingleQuote: true
+  overrides: [
+    {
+      files: ["**/*.css", "**/*.scss", "**/*.html"],
+      options: {
+        singleQuote: false
+      }
+    }
+  ]
 }

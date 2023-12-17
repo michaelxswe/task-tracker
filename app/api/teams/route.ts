@@ -1,7 +1,7 @@
-import prisma from '@/prisma/client'
-import { NextRequest, NextResponse } from 'next/server'
-import { Team } from '@prisma/client'
-import { teamSchema } from '@/app/utils/validationSchemas'
+import prisma from "@/prisma/client"
+import { NextRequest, NextResponse } from "next/server"
+import { Team } from "@prisma/client"
+import { teamSchema } from "@/app/utils/validationSchemas"
 
 const POST = async (request: NextRequest) => {
   const body: Team = await request.json()
@@ -17,7 +17,7 @@ const POST = async (request: NextRequest) => {
   })
 
   if (team) {
-    return NextResponse.json({ error: 'Name already exist' }, { status: 403 })
+    return NextResponse.json({ error: "Name already exist" }, { status: 403 })
   }
 
   const newTeam = await prisma.team.create({

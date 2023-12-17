@@ -1,7 +1,7 @@
-import { taskSchema } from '@/app/utils/validationSchemas'
-import prisma from '@/prisma/client'
-import { Priority, Status, Task } from '@prisma/client'
-import { NextRequest, NextResponse } from 'next/server'
+import { taskSchema } from "@/app/utils/validationSchemas"
+import prisma from "@/prisma/client"
+import { Priority, Status, Task } from "@prisma/client"
+import { NextRequest, NextResponse } from "next/server"
 
 const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: string } }) => {
   const body: Task = await request.json()
@@ -18,7 +18,7 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
   })
 
   if (!task) {
-    return NextResponse.json({ error: 'Task cannot be found' }, { status: 404 })
+    return NextResponse.json({ error: "Task cannot be found" }, { status: 404 })
   }
 
   if (body.title != task.title) {
@@ -26,7 +26,7 @@ const PATCH = async (request: NextRequest, { params: { id } }: { params: { id: s
       where: { title: body.title }
     })
     if (existing_title) {
-      return NextResponse.json({ error: 'Title already exist!' }, { status: 403 })
+      return NextResponse.json({ error: "Title already exist!" }, { status: 403 })
     }
   }
 
@@ -53,7 +53,7 @@ const DELETE = async (request: NextRequest, { params: { id } }: { params: { id: 
   })
 
   if (!task) {
-    return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+    return NextResponse.json({ error: "Task not found" }, { status: 404 })
   }
 
   await prisma.task.delete({
