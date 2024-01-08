@@ -1,6 +1,4 @@
-# TaskFlow Manager
-
-A cross-team task tracker
+# Task Manager
 
 <https://task-tracker-self.vercel.app>
 
